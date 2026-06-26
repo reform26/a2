@@ -1773,13 +1773,24 @@
                     // 글자크기 바 + 헤더가 하나의 sticky 블록(top-fixed-area)으로 묶여 있으므로
                     // 그 블록 전체 높이를 한 번에 측정하면 더 정확하고 흔들림이 없다.
                     const fixedAreaHeight = topFixedArea.offsetHeight;
+                    document.documentElement.style.setProperty('--header-h', fixedAreaHeight + 'px');
+
+                    // 모바일(가로 1024px 미만)에서는 슬라이더가 화면 폭에 맞춰 작아지면서
+                    // 섹션을 풀스크린 높이로 강제하면 위아래에 큰 빈 공간이 생긴다.
+                    // 데스크탑에서만 "한 화면씩 꽉 차게" 스냅하고, 모바일에서는 콘텐츠 높이만큼만
+                    // 차지하도록 한다(자연스러운 스크롤).
+                    const isDesktop = window.innerWidth >= 1024;
                     const sectionMinHeight = window.innerHeight - fixedAreaHeight;
 
-                    document.documentElement.style.setProperty('--header-h', fixedAreaHeight + 'px');
                     fillSections.forEach(sec => {
-                        // min-height만 지정해서, 콘텐츠가 더 크면 섹션이 자연스럽게 늘어나고
-                        // (justify-center로 인한 콘텐츠 잘림 없음) 화면보다 작으면 한 화면을 채운다.
-                        sec.style.minHeight = sectionMinHeight + 'px';
+                        if (isDesktop) {
+                            // min-height만 지정해서, 콘텐츠가 더 크면 섹션이 자연스럽게 늘어나고
+                            // (justify-center로 인한 콘텐츠 잘림 없음) 화면보다 작으면 한 화면을 채운다.
+                            sec.style.minHeight = sectionMinHeight + 'px';
+                        } else {
+                            // 모바일에서는 강제 높이를 풀어 콘텐츠 크기만큼만 차지하게 한다.
+                            sec.style.minHeight = '';
+                        }
                     });
                 }
 
