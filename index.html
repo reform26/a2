@@ -6,22 +6,22 @@
     <title>개혁신당 충남도당</title>
 
     <!-- 검색엔진 노출용 설명 -->
-    <meta name="description" content="개혁신당 충청남도당 공식 홈페이지. 위원장 인사말, 공지 및 보도자료, 당원 가입 안내를 확인하세요.">
+    <meta name="description" content="개혁신당 충청남도당 공식 홈페이지. 위원장 인사말, 소식(공지사항·보도자료), 당원 가입 안내를 확인하세요.">
 
     <!-- 카카오톡·페이스북 등 링크 공유 미리보기 (Open Graph) -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="개혁신당 충청남도당">
-    <meta property="og:title" content="개혁신당 충청남도당">
-    <meta property="og:description" content="충남의 내일, 개혁신당이 새롭게 엽니다. 개혁신당 충청남도당 공식 홈페이지.">
-    <meta property="og:image" content="https://www.reformparty.kr/theme/basic/images/site_img.png">
+    <meta property="og:site_name" content="개혁신당 충남도당">
+    <meta property="og:title" content="개혁신당 충남도당">
+    <meta property="og:description" content="충남의 내일, 개혁신당이 새롭게 엽니다">
+    <meta property="og:image" content="https://i.imgur.com/Kie4ygH.png">
     <!-- TODO: 실제 도메인 연결 시 아래 og:url을 정확한 주소로 교체하세요 -->
     <meta property="og:url" content="https://reform-chungnam.kr">
 
     <!-- 트위터(X) 카드 -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="개혁신당 충청남도당">
-    <meta name="twitter:description" content="충남의 내일, 개혁신당이 새롭게 엽니다. 개혁신당 충청남도당 공식 홈페이지.">
-    <meta name="twitter:image" content="https://www.reformparty.kr/theme/basic/images/site_img.png">
+    <meta name="twitter:title" content="개혁신당 충남도당">
+    <meta name="twitter:description" content="충남의 내일, 개혁신당이 새롭게 엽니다">
+    <meta name="twitter:image" content="https://i.imgur.com/Kie4ygH.png">
 
     <!-- 파비콘 (오렌지 브랜드 컬러의 심볼) -->
     <link rel="icon" type="image/png" href="./favicon.png">
@@ -30,9 +30,18 @@
     <!-- 한국어 폰트 (Noto Sans KR) 로드 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 자주 쓰이는 굵기(700/900)를 우선 요청하여 초기 렌더링 시 FOUT(글꼴 깜빡임)을 줄임 -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700;900&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS 로드 -->
+    <!-- Tailwind CSS
+         현재: CDN (개발·프리뷰용)
+         프로덕션 배포 전 아래 절차로 빌드 CSS로 교체하세요:
+           1. npm install -D tailwindcss
+           2. npx tailwindcss -i ./src/input.css -o ./dist/output.css --minify
+           3. 아래 <script> 두 줄을 제거하고 <link rel="stylesheet" href="./dist/output.css"> 로 교체
+              (tailwind.config.js 파일은 이미 생성되어 있습니다)
+    -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -64,8 +73,9 @@
         }
     </script>
 
-    <!-- 홈 화면 스크롤 스냅 스타일 -->
+    <!-- 페이지 전역 커스텀 스타일 (홈 스크롤 스냅 / 헤더 축소 / 히어로 액션 버튼 / 인물 카드 뱃지) -->
     <style>
+        /* 1) 홈 화면 스크롤 스냅 스타일 */
         html.home-snap-on {
             /* mandatory는 스크롤을 멈출 때마다 무조건 가장 가까운 스냅 지점으로 강제 이동시켜
                헤더/글자크기 바가 갑자기 사라지거나 화면이 튀는 것처럼 느껴지는 부작용이 있었음.
@@ -76,10 +86,8 @@
         html.home-snap-on .home-snap-section {
             scroll-snap-align: start;
         }
-    </style>
 
-    <!-- 스크롤 시 헤더 축소(슬림화) 스타일 -->
-    <style>
+        /* 2) 스크롤 시 헤더 축소(슬림화) 스타일 */
         #site-header,
         #site-header .header-row,
         #site-header .header-logo-img,
@@ -123,34 +131,89 @@
                 font-size: 17px;
             }
         }
+
+        /* 3) 메인 슬라이드 액션 버튼 패널 스타일 (모바일: 가로 4분할 / PC: 세로 4단) */
+        /* 모바일: 좌측 세로 구분선 */
+        #hero-side-actions .hero-side-btn:not(:first-child) {
+            border-left: 1px solid var(--side-border, rgba(255,255,255,0.12));
+        }
+        @media (min-width: 1024px) {
+            #hero-side-actions .hero-side-btn:hover {
+                filter: brightness(1.08);
+                padding-left: 0.5rem;
+            }
+            #hero-side-actions .hero-side-btn:active {
+                filter: brightness(0.96);
+            }
+            /* PC: 상단 가로 구분선으로 전환 */
+            #hero-side-actions .hero-side-btn:not(:first-child) {
+                border-left: none;
+                border-top: 1px solid var(--side-border, rgba(255,255,255,0.12));
+            }
+        }
+
+        /* 4) 인물 카드: 사진 위에 올라가는 뱃지를 프로스티드 글래스 스타일로 표시 */
+        .people-card-photo .people-card-badges span {
+            background: rgba(20,20,22,0.62) !important;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #fff !important;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+        }
+
+        /* 5) 상단 글자크기 바 + 다크모드 토글 (인라인 style 대체) */
+        .top-fixed-area { position: sticky; top: 0; z-index: 51; }
+        .font-size-bar {
+            background: #fff; border-bottom: 0.5px solid #e5e7eb; padding: 5px 20px;
+            transition: background 0.3s, max-height 0.25s ease, padding 0.25s ease, border-bottom-width 0.25s ease, overflow 0.25s ease;
+            max-height: 40px; overflow: visible;
+        }
+        .font-size-bar.is-collapsed { max-height: 0; overflow: hidden; padding-top: 0; padding-bottom: 0; border-bottom-width: 0; }
+        .font-size-bar-inner { max-width: 1600px; margin: 0 auto; display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+        .font-size-bar-label { font-size: 12px; color: #6b7280; font-weight: 500; letter-spacing: 0.03em; }
+        .font-size-divider { width: 1px; height: 12px; background: #e5e7eb; display: inline-block; margin: 0 2px; }
+        .theme-toggle-btn { width: 40px; height: 22px; border-radius: 999px; border: none; cursor: pointer; padding: 2px; position: relative; transition: background 0.3s; background: #e2e8f0; flex-shrink: 0; display: flex; align-items: center; }
+        .theme-toggle-btn.is-dark { background: #334155; }
+        .theme-toggle-icons { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; pointer-events: none; }
+        .theme-toggle-thumb { display: block; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.2); transition: transform 0.3s; transform: translateX(0); position: relative; z-index: 1; }
+        .theme-toggle-btn.is-dark .theme-toggle-thumb { transform: translateX(24px); }
+        .font-size-group { display: flex; align-items: center; gap: 0; border: 0.5px solid #e5e7eb; border-radius: 6px; overflow: hidden; background: #f9fafb; }
+        .font-size-btn { width: 26px; height: 22px; border: none; cursor: pointer; background: transparent; color: #6b7280; font-size: 15px; font-weight: 400; display: flex; align-items: center; justify-content: center; line-height: 1; padding: 0; transition: background 0.12s; }
+        .font-size-btn-down { border-right: 0.5px solid #e5e7eb; }
+        .font-size-btn-up { border-left: 0.5px solid #e5e7eb; }
+        .font-size-pct { font-size: 12px; font-weight: 600; color: #374151; min-width: 36px; text-align: center; padding: 0 4px; }
+        .font-size-bar.is-dark { background: #111827; border-bottom-color: #1f2937; }
+        .font-size-bar.is-dark .font-size-bar-label { color: #9ca3af; }
+        .font-size-bar.is-dark .font-size-pct { color: #d1d5db; }
+        .font-size-bar.is-dark .font-size-group { background: #1f2937; border-color: #374151; }
+        .font-size-bar.is-dark .font-size-btn { color: #9ca3af; border-color: #374151; }
+        .font-size-bar.is-dark .font-size-btn:hover { background: #1f2937; }
+        .font-size-bar:not(.is-dark) .font-size-btn:hover { background: #f3f4f6; }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 flex flex-col min-h-screen font-sans transition-colors duration-300">
 
     <!-- 상단 고정 영역: 글자크기 바 + 헤더를 하나의 sticky 블록으로 묶음 -->
-    <div id="top-fixed-area" style="position:sticky;top:0;z-index:51;">
+    <div id="top-fixed-area" class="top-fixed-area">
 
     <!-- 글자크기 상단 바 -->
-    <div id="font-size-bar" style="background:#fff;border-bottom:0.5px solid #e5e7eb;padding:5px 20px;transition:background 0.3s;">
-      <div style="max-width:1600px;margin:0 auto;display:flex;justify-content:flex-end;align-items:center;gap:10px;">
-        <span style="font-size:12px;color:#9ca3af;font-weight:500;letter-spacing:0.03em;">다크모드</span>
-        <button type="button" id="theme-toggle" aria-label="다크모드 전환" aria-pressed="false"
-          style="width:40px;height:22px;border-radius:999px;border:none;cursor:pointer;padding:2px;position:relative;transition:background 0.3s;background:#e2e8f0;flex-shrink:0;display:flex;align-items:center;">
-          <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 5px;pointer-events:none;">
+    <div id="font-size-bar" class="font-size-bar">
+      <div class="font-size-bar-inner">
+        <span class="font-size-bar-label hidden sm:inline">다크모드</span>
+        <button type="button" id="theme-toggle" aria-label="다크모드 전환" aria-pressed="false" class="theme-toggle-btn">
+          <span class="theme-toggle-icons">
             <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" style="color:#f59e0b;flex-shrink:0;"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 4.22a1 1 0 01-1.415 1.415l-.708-.708a1 1 0 011.415-1.415l.708.708zM12 10a2 2 0 11-4 0 2 2 0 014 0zM8.586 15.414a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM10 18a1 1 0 01-1-1v-1a1 1 0 112 0v1a1 1 0 01-1 1zm4.22-4.22a1 1 0 011.415-1.415l.708.708a1 1 0 01-1.415 1.415l-.708-.708zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zM4.93 4.93a1 1 0 011.414-1.414l.707.707a1 1 0 01-1.414 1.414l-.707-.707z"/></svg>
             <svg width="9" height="9" viewBox="0 0 20 20" fill="currentColor" style="color:#94a3b8;flex-shrink:0;"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
           </span>
-          <span id="theme-toggle-thumb" style="display:block;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:transform 0.3s;transform:translateX(0);position:relative;z-index:1;"></span>
+          <span id="theme-toggle-thumb" class="theme-toggle-thumb"></span>
         </button>
-        <span style="width:1px;height:12px;background:#e5e7eb;display:inline-block;margin:0 2px;"></span>
-        <span style="font-size:12px;color:#9ca3af;font-weight:500;letter-spacing:0.03em;">글자크기</span>
-        <div style="display:flex;align-items:center;gap:0;border:0.5px solid #e5e7eb;border-radius:6px;overflow:hidden;background:#f9fafb;">
-          <button id="font-size-down" aria-label="글자 작게"
-            style="width:26px;height:22px;border:none;cursor:pointer;background:transparent;color:#6b7280;font-size:15px;font-weight:400;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:background 0.12s;border-right:0.5px solid #e5e7eb;">−</button>
-          <span id="font-size-pct"
-            style="font-size:12px;font-weight:600;color:#374151;min-width:36px;text-align:center;padding:0 4px;">100%</span>
-          <button id="font-size-up" aria-label="글자 크게"
-            style="width:26px;height:22px;border:none;cursor:pointer;background:transparent;color:#6b7280;font-size:15px;font-weight:400;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:background 0.12s;border-left:0.5px solid #e5e7eb;">+</button>
+        <span class="font-size-divider"></span>
+        <span class="font-size-bar-label hidden sm:inline">글자크기</span>
+        <div class="font-size-group">
+          <button id="font-size-down" aria-label="글자 작게" class="font-size-btn font-size-btn-down">−</button>
+          <span id="font-size-pct" class="font-size-pct">100%</span>
+          <button id="font-size-up" aria-label="글자 크게" class="font-size-btn font-size-btn-up">+</button>
         </div>
       </div>
     </div>
@@ -181,9 +244,8 @@
                             소개
                             <span class="nav-indicator absolute bottom-0 left-0 w-full h-[3px] bg-reform-500 hidden"></span>
                         </a>
-                        <a href="#" onclick="comingSoon('인물'); return false;" class="nav-link mega-trigger relative h-16 lg:h-20 flex items-center text-black dark:text-white font-bold text-[15px] hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">인물</a>
-                        <a href="#" onclick="comingSoon('소식'); return false;" class="nav-link mega-trigger relative h-16 lg:h-20 flex items-center text-black dark:text-white font-bold text-[15px] hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">소식</a>
-                        <a href="#" onclick="switchView('view-notice'); return false;" class="nav-link mega-trigger relative h-16 lg:h-20 flex items-center text-black dark:text-white font-bold text-[15px] hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">공지 및 보도자료</a>
+                        <a href="#" onclick="switchView('view-people'); return false;" class="nav-link mega-trigger relative h-16 lg:h-20 flex items-center text-black dark:text-white font-bold text-[15px] hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">인물</a>
+                        <a href="#" onclick="switchView('view-notice'); return false;" class="nav-link mega-trigger relative h-16 lg:h-20 flex items-center text-black dark:text-white font-bold text-[15px] hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">소식</a>
                         <a href="https://home.reformparty.kr/auth/register" target="_blank" rel="noopener" class="nav-link mega-trigger relative h-16 lg:h-20 flex items-center text-black dark:text-white font-bold text-[15px] hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">입당</a>
                     </nav>
 
@@ -203,19 +265,12 @@
                             <div>
                                 <p class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">인물</p>
                                 <div class="space-y-1">
-                                    <a href="#" onclick="comingSoon('인물'); hideMegaMenu(); return false;" class="block px-1 py-1.5 text-[14px] font-bold text-gray-700 dark:text-gray-300 hover:text-reform-500 dark:hover:text-reform-500 transition-colors">준비 중</a>
+                                    <a href="#" onclick="switchView('view-people'); hideMegaMenu(); return false;" class="block px-1 py-1.5 text-[14px] font-bold text-gray-700 dark:text-gray-300 hover:text-reform-500 dark:hover:text-reform-500 transition-colors">전체 보기</a>
                                 </div>
                             </div>
                             <!-- 소식 -->
                             <div>
                                 <p class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">소식</p>
-                                <div class="space-y-1">
-                                    <a href="#" onclick="comingSoon('소식'); hideMegaMenu(); return false;" class="block px-1 py-1.5 text-[14px] font-bold text-gray-700 dark:text-gray-300 hover:text-reform-500 dark:hover:text-reform-500 transition-colors">준비 중</a>
-                                </div>
-                            </div>
-                            <!-- 공지 및 보도자료 -->
-                            <div>
-                                <p class="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">공지 및 보도자료</p>
                                 <div class="space-y-1">
                                     <a href="#" onclick="switchView('view-notice','notice'); hideMegaMenu(); return false;" class="block px-1 py-1.5 text-[14px] font-bold text-gray-700 dark:text-gray-300 hover:text-reform-500 dark:hover:text-reform-500 transition-colors">공지사항</a>
                                     <a href="#" onclick="switchView('view-notice','press'); hideMegaMenu(); return false;" class="block px-1 py-1.5 text-[14px] font-bold text-gray-700 dark:text-gray-300 hover:text-reform-500 dark:hover:text-reform-500 transition-colors">보도자료</a>
@@ -274,11 +329,10 @@
                             <a href="#" onclick="switchView('view-intro', 'about'); document.getElementById('mobile-menu-close-btn').click(); return false;" class="block text-[15px] font-bold text-gray-600 dark:text-gray-400 hover:text-reform-500 dark:hover:text-reform-500 transition-colors">오시는 길</a>
                         </div>
                     </div>
-                    <div><a href="#" onclick="comingSoon('인물'); return false;" class="block text-[17px] font-bold text-black dark:text-white hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">인물</a></div>
-                    <div><a href="#" onclick="comingSoon('소식'); return false;" class="block text-[17px] font-bold text-black dark:text-white hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">소식</a></div>
+                    <div><a href="#" onclick="switchView('view-people'); document.getElementById('mobile-menu-close-btn').click(); return false;" class="block text-[17px] font-bold text-black dark:text-white hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">인물</a></div>
                     <div>
                         <button type="button" id="mobile-notice-toggle" aria-expanded="false" aria-controls="mobile-notice-submenu" onclick="toggleMobileNoticeSubmenu()" class="w-full flex items-center justify-between text-[17px] font-bold text-black dark:text-white hover:text-reform-500 dark:hover:text-reform-500 transition-colors tracking-tight">
-                            공지 및 보도자료
+                            소식
                             <svg id="mobile-notice-icon" aria-hidden="true" focusable="false" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <div id="mobile-notice-submenu" class="hidden mt-4 ml-4 space-y-4 border-l border-gray-200 dark:border-gray-800 pl-4">
@@ -341,7 +395,8 @@
             <!-- 스냅 섹션 1: 메인 히어로 이미지 슬라이더 -->
             <section id="home-snap-1" class="home-snap-section bg-white dark:bg-gray-900 py-8 sm:py-10 flex flex-col items-stretch justify-center" style="scroll-margin-top: var(--header-h, 80px);">
                 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                    <div id="hero-slider" class="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl select-none" style="aspect-ratio: 16/10; max-height: min(70vh, 600px);">
+                    <div class="flex flex-col lg:flex-row items-stretch w-full gap-3 lg:gap-4">
+                    <div id="hero-slider" class="relative overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl select-none min-w-0 lg:flex-[7_7_0%]" style="aspect-ratio: 16/10; max-height: min(70vh, 600px);">
 
                         <!-- 슬라이드 트랙 -->
                         <div id="hero-slider-track" class="flex h-full transition-transform duration-500 ease-out" style="will-change:transform;">
@@ -421,8 +476,57 @@
                             <svg aria-hidden="true" focusable="false" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                         </button>
 
-                        <!-- 하단 인디케이터 닷 -->
-                        <div id="hero-dots" class="absolute left-6 sm:left-10 lg:left-14 bottom-4 sm:bottom-6 flex items-center gap-2 z-20"></div>
+                        <!-- 인디케이터 닷 PC전용 (슬라이더 내부 우하단) -->
+                        <div id="hero-dots-pc" class="hidden lg:flex absolute right-6 bottom-5 items-center gap-2 z-20"></div>
+
+                    </div>
+
+                    <!-- 인디케이터 닷 모바일 (슬라이더 외부) -->
+                    <div id="hero-dots" class="flex items-center justify-center gap-2 mt-3 lg:hidden"></div>
+
+                    <!-- 자동 재생 슬라이더가 전환될 때 스크린 리더에 알려주는 영역 (시각적으로는 숨김) -->
+                    <div id="hero-slide-announcer" class="sr-only" role="status" aria-live="polite"></div>
+
+                    <!-- 액션 버튼 패널: 모바일은 슬라이드 하단에 가로 4분할, PC는 우측에 세로 4단(7:1.5) -->
+                    <div id="hero-side-actions" class="flex flex-row lg:flex-col overflow-hidden rounded-2xl shadow-xl select-none lg:flex-[1.5_1.5_0%]">
+                        <a href="https://home.reformparty.kr/auth/register" target="_blank" rel="noopener" class="hero-side-btn group relative flex flex-1 items-center justify-center text-center text-white font-bold tracking-tight transition-all duration-200 py-3 lg:py-0"
+                           style="background:#F2783A;">
+                            <span class="flex flex-col lg:flex-row items-center justify-center gap-1 lg:gap-2.5">
+                                <svg class="w-4 h-4 lg:w-5 lg:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z"></path></svg>
+                                <span class="text-[11px] lg:text-[17px]">입당신청</span>
+                            </span>
+                            <span class="hidden lg:flex absolute right-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" aria-hidden="true">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </span>
+                        </a>
+                        <a href="https://home.reformparty.kr/account/donate" target="_blank" rel="noopener" class="hero-side-btn group relative flex flex-1 items-center justify-center text-center text-white font-bold tracking-tight transition-all duration-200 py-3 lg:py-0"
+                           style="background:#222b36; --side-border:rgba(255,255,255,0.12);">
+                            <span class="flex flex-col lg:flex-row items-center justify-center gap-1 lg:gap-2.5">
+                                <svg class="w-4 h-4 lg:w-5 lg:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"></path></svg>
+                                <span class="text-[11px] lg:text-[17px]">당비납부</span>
+                            </span>
+                            <span class="hidden lg:flex absolute right-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" aria-hidden="true">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </span>
+                        </a>
+                        <a href="#" onclick="openDonateModal(); return false;" class="hero-side-btn group relative flex flex-1 items-center justify-center text-center text-white font-bold tracking-tight transition-all duration-200 py-3 lg:py-0"
+                           style="background:#E26A30; --side-border:rgba(255,255,255,0.15);">
+                            <span class="flex flex-col lg:flex-row items-center justify-center gap-1 lg:gap-2.5">
+                                <svg class="w-4 h-4 lg:w-5 lg:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path></svg>
+                                <span class="text-[11px] lg:text-[17px]">후원하기</span>
+                            </span>
+                            <span class="hidden lg:flex absolute right-3 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" aria-hidden="true">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                            </span>
+                        </a>
+                        <a href="https://reformparty.kr/party/withdraw" target="_blank" rel="noopener" class="hero-side-btn group relative flex flex-1 items-center justify-center text-center text-white/55 font-semibold tracking-tight transition-all duration-200 hover:text-white/85 py-3 lg:py-0"
+                           style="background:rgba(20,24,30,0.45); --side-border:rgba(255,255,255,0.08); backdrop-filter:blur(2px);">
+                            <span class="flex flex-col lg:flex-row items-center justify-center gap-1 lg:gap-2.5">
+                                <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"></path></svg>
+                                <span class="text-[10px] lg:text-[14px]">탈당신청</span>
+                            </span>
+                        </a>
+                    </div>
 
                     </div>
                 </div>
@@ -430,10 +534,10 @@
 
             <!-- 스냅 섹션 2: 퀵 링크 및 최근 게시물 영역 -->
             <section id="home-snap-2" class="home-snap-section max-w-[1200px] mx-auto px-4 py-16 w-full" style="scroll-margin-top: var(--header-h, 80px);">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
                     
                     <!-- 1. 최근 공지사항 프리뷰 -->
-                    <div class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+                    <div class="lg:col-span-2 h-full bg-white dark:bg-gray-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
                         <div class="flex justify-between items-center mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
                             <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center">
                                 <span class="w-2 h-6 bg-reform-500 rounded-full mr-3"></span>
@@ -444,41 +548,14 @@
                             </a>
                         </div>
                         
-                        <ul class="space-y-4">
-                            <li class="group cursor-pointer">
-                                <a href="#" onclick="openNoticeModal('press-3'); return false;" class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
-                                    <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-                                        <span class="px-2.5 py-1 text-[11px] font-bold bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400 rounded-md whitespace-nowrap">보도자료</span>
-                                        <h4 class="text-[15px] font-bold text-gray-800 dark:text-gray-200 group-hover:text-reform-500 transition-colors truncate">개혁신당 충청남도당 창당준비위원회 출범</h4>
-                                    </div>
-                                    <span class="text-sm text-gray-400 dark:text-gray-500 sm:ml-4 whitespace-nowrap">2026.06.21</span>
-                                </a>
-                            </li>
-                            <li class="group cursor-pointer">
-                                <a href="#" onclick="openNoticeModal('notice-2'); return false;" class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
-                                    <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-                                        <span class="px-2.5 py-1 text-[11px] font-bold bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 rounded-md whitespace-nowrap">공지</span>
-                                        <h4 class="text-[15px] font-bold text-gray-800 dark:text-gray-200 group-hover:text-reform-500 transition-colors truncate">충청남도당 당원 입당 안내 및 절차 안내</h4>
-                                    </div>
-                                    <span class="text-sm text-gray-400 dark:text-gray-500 sm:ml-4 whitespace-nowrap">2026.06.15</span>
-                                </a>
-                            </li>
-                            <li class="group cursor-pointer">
-                                <a href="#" onclick="openNoticeModal('notice-1'); return false;" class="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
-                                    <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-                                        <span class="px-2.5 py-1 text-[11px] font-bold bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300 rounded-md whitespace-nowrap">일정</span>
-                                        <h4 class="text-[15px] font-bold text-gray-800 dark:text-gray-200 group-hover:text-reform-500 transition-colors truncate">시·군 조직위원회 구성 및 발대식 일정 안내</h4>
-                                    </div>
-                                    <span class="text-sm text-gray-400 dark:text-gray-500 sm:ml-4 whitespace-nowrap">2026.06.10</span>
-                                </a>
-                            </li>
-                        </ul>
+                        <!-- board-data.js 데이터 기반으로 DOMContentLoaded 시 동적 렌더링됩니다 -->
+                        <ul id="home-news-list" class="space-y-1"></ul>
                     </div>
 
-                    <!-- 2. 퀵 링크 배너 -->
-                    <div class="space-y-4">
+                    <!-- 2. 퀵 링크 배너 (좌측 소식 카드와 전체 높이를 맞춰 2개 배너가 균등 분할) -->
+                    <div class="grid grid-rows-2 gap-4 min-h-[260px] sm:h-full">
                         <!-- 정책 배너 -->
-                        <a href="https://www.reformparty.kr/policy" target="_blank" rel="noopener" class="block bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all group overflow-hidden relative">
+                        <a href="https://www.reformparty.kr/policy" target="_blank" rel="noopener" class="flex-1 flex flex-col justify-center bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all group overflow-hidden relative">
                             <div class="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4 group-hover:scale-110 transition-transform duration-500">
                                 <svg aria-hidden="true" focusable="false" class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
                             </div>
@@ -490,7 +567,7 @@
                         </a>
 
                         <!-- 인재영입 배너 -->
-                        <a href="#" onclick="comingSoon('인재 영입'); return false;" class="block bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl p-6 shadow-sm hover:border-reform-500 dark:hover:border-reform-500 transition-all group">
+                        <a href="#" onclick="comingSoon('인재 영입'); return false;" class="flex-1 flex flex-col justify-center bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl p-6 shadow-sm hover:border-reform-500 dark:hover:border-reform-500 transition-all group">
                             <div class="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center text-reform-500 mb-4">
                                 <svg aria-hidden="true" focusable="false" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                             </div>
@@ -512,20 +589,20 @@
             
             <!-- 탭 메뉴(서브 네비게이션) -->
             <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors">
-                <div class="max-w-[1200px] mx-auto px-4 flex space-x-4">
-                    <button id="tab-btn-greeting" class="py-4 text-[15px] font-bold text-reform-500 border-b-[3px] border-reform-500">위원장 인사말</button>
-                    <button id="tab-btn-org" class="py-4 text-[15px] font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors border-b-[3px] border-transparent">조직도</button>
-                    <button id="tab-btn-about" class="py-4 text-[15px] font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors border-b-[3px] border-transparent">오시는 길</button>
+                <div class="max-w-[1200px] mx-auto px-4 flex items-center gap-1 py-2.5" role="tablist" aria-label="시당소개 탭">
+                    <button id="tab-btn-greeting" role="tab" aria-selected="true" aria-controls="section-greeting" class="py-2 px-4 text-[14px] font-bold rounded-full bg-reform-500 text-white transition-all">위원장 인사말</button>
+                    <button id="tab-btn-org" role="tab" aria-selected="false" aria-controls="section-org" class="py-2 px-4 text-[14px] font-bold rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">조직도</button>
+                    <button id="tab-btn-about" role="tab" aria-selected="false" aria-controls="section-about" class="py-2 px-4 text-[14px] font-bold rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">오시는 길</button>
                 </div>
             </div>
 
             <!-- 내용 래퍼 -->
             <div class="py-10 sm:py-16">
                 <!-- 1. 인사말 섹션 (기본 활성화) -->
-                <section id="section-greeting" class="px-0">
+                <section id="section-greeting" class="px-0" role="tabpanel" aria-labelledby="tab-btn-greeting" tabindex="0">
                     <!-- 브레드크럼 (이동경로) -->
                     <div class="text-[13px] text-gray-500 dark:text-gray-400 mb-6 font-medium max-w-[1200px] mx-auto px-4">
-                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-400 dark:text-gray-500">시당소개</span> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-800 dark:text-gray-200 font-semibold">위원장 인사말</span>
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-400 dark:text-gray-500">시당소개</span> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-800 dark:text-gray-200 font-semibold">위원장 인사말</span>
                     </div>
 
                     <!-- 메인 인사말 배너: 살구색 배경, 텍스트 좌 + 사진 우 -->
@@ -539,14 +616,14 @@
                         <div class="max-w-[1200px] mx-auto px-6 sm:px-10 w-full flex flex-col sm:flex-row items-center relative z-10">
 
                             <!-- 모바일 전용: 우측 사진 (사각형, absolute로 텍스트 흐름과 분리) -->
-                            <div class="block sm:hidden absolute top-24 right-6 w-24 h-28 rounded-xl overflow-hidden border-2 border-white/30 shadow-xl">
+                            <div class="block sm:hidden absolute top-6 right-5 w-20 h-24 rounded-xl overflow-hidden border-2 border-white/30 shadow-xl">
                                 <img src="https://i.imgur.com/j63o8hz.png" alt="위원장 이은창" style="width:100%; height:100%; object-fit:cover; object-position:center top;">
                             </div>
 
                             <!-- 왼쪽: 텍스트 -->
-                            <div class="flex-1 py-12 sm:py-16 pr-0 sm:pr-10">
+                            <div class="flex-1 py-10 sm:py-16 pr-28 sm:pr-10">
                                 <!-- 상단 레이블 -->
-                                <p style="color:rgba(255,255,255,0.85); font-size:15px; font-weight:500; margin-bottom:10px; letter-spacing:0.02em;">안녕하십니까?</p>
+                                <p style="color:rgba(255,255,255,1); font-size:15px; font-weight:500; margin-bottom:10px; letter-spacing:0.02em;">안녕하십니까?</p>
 
                                 <!-- 대제목 -->
                                 <h2 style="color:#fff; font-size:clamp(26px, 4vw, 40px); font-weight:900; line-height:1.25; margin-bottom:28px; letter-spacing:-0.02em; text-shadow:0 2px 8px rgba(0,0,0,0.1);">
@@ -554,7 +631,7 @@
                                 </h2>
 
                                 <!-- 본문 -->
-                                <div style="color:rgba(255,255,255,0.93); font-size:14.5px; line-height:1.95; word-break:keep-all;" class="space-y-3">
+                                <div style="color:#ffffff; font-size:16px; line-height:1.95; word-break:keep-all;" class="space-y-3">
                                     <p>존경하고 사랑하는 충남 도민 여러분,</p>
                                     <p>충남은 대한민국의 산업과 농업을 함께 떠받쳐온 땅입니다.<br>
                                     하지만 정작 이곳에 사는 청년들은 일자리를 찾아 떠나고,<br>
@@ -567,7 +644,7 @@
 
                                 <!-- 서명 -->
                                 <div style="margin-top:28px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.3);">
-                                    <p style="color:rgba(255,255,255,0.7); font-size:13px; font-weight:500; margin-bottom:6px;">개혁신당 충청남도당</p>
+                                    <p style="color:rgba(255,255,255,0.85); font-size:13px; font-weight:500; margin-bottom:6px;">개혁신당 충청남도당</p>
                                     <p style="color:#fff; font-size:17px; font-weight:900; letter-spacing:0.04em;">위원장 직무대행 이은창</p>
                                 </div>
                             </div>
@@ -586,31 +663,169 @@
                 </section>
 
                 <!-- 2. 조직도 섹션 (기본 숨김) -->
-                <section id="section-org" class="max-w-[1200px] mx-auto px-4 hidden">
-                    <!-- 브레드크럼 -->
+                <section id="section-org" class="max-w-[1200px] mx-auto px-4 hidden" role="tabpanel" aria-labelledby="tab-btn-org" tabindex="0">
                     <div class="text-[13px] text-gray-500 dark:text-gray-400 mb-6 font-medium">
-                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-400 dark:text-gray-500">시당소개</span> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-800 dark:text-gray-200 font-semibold">조직도</span>
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a>
+                        <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span>
+                        <span class="text-gray-400 dark:text-gray-500">시당소개</span>
+                        <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span>
+                        <span class="text-gray-800 dark:text-gray-200 font-semibold">조직도</span>
                     </div>
 
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
-                            조직도
-                        </h2>
+                    <div class="text-center mb-10">
+                        <h2 class="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">조직도</h2>
+                        <p class="text-gray-500 dark:text-gray-400 text-[15px]">개혁신당 충청남도당 조직 구성</p>
                     </div>
 
-                    <div class="max-w-[800px] mx-auto py-16 text-center">
-                        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 dark:bg-orange-900/30 text-reform-500 mb-6">
-                            <svg aria-hidden="true" focusable="false" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2a4 4 0 014-4h0a4 4 0 014 4v2M9 7a3 3 0 106 0 3 3 0 00-6 0zM3 17v-1a3 3 0 013-3h0M21 17v-1a3 3 0 00-3-3h0"></path></svg>
-                        </div>
-                        <p class="text-gray-500 dark:text-gray-400 break-keep">개혁신당 충청남도당의 조직도 페이지를 준비하고 있습니다.<br>빠른 시일 내에 찾아뵙겠습니다.</p>
+                    <div style="width:100%;overflow-x:auto;padding-bottom:8px;">
+                    <svg id="org-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 796" style="width:100%;min-width:600px;font-family:'Noto Sans KR',sans-serif;font-size:14px;">
+                      <defs>
+                        <linearGradient id="og" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#FF5E00"/>
+                          <stop offset="100%" stop-color="#FF8C42"/>
+                        </linearGradient>
+                        <linearGradient id="og2" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#E65500"/>
+                          <stop offset="100%" stop-color="#FF5E00"/>
+                        </linearGradient>
+                      </defs>
+
+                      <!--
+                        레이아웃 기준
+                        중앙 x = 390
+                        ┌─────────────────────────────────┐
+                        도당대회   y=20  h=44  → bottom=64
+                        선+점      64~90
+                        도당운영위원회 y=90 h=40 → bottom=130  우측분기→운영위원 x=560
+                        선+점      130~165
+                        도당위원장 y=165 h=100 → bottom=265
+                        선+점      265~300
+                        사무처     y=300 h=60  → bottom=360   우측분기→부위원장 x=560
+                        선+점      360~400
+                        4본부 가로선 y=400
+                        본부헤더   y=420 h=40
+                        본부카드   y=468
+                      -->
+
+                      <!-- ── 연결선 ── -->
+                      <!-- 도당대회 → 도당운영위원회 -->
+                      <line x1="390" y1="100" x2="390" y2="114" stroke="#FFB07A" stroke-width="2"/>
+                      <circle cx="390" cy="118" r="4" fill="#FF5E00"/>
+                      <line x1="390" y1="122" x2="390" y2="126" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- 도당운영위원회 → 운영위원 (박스 우측 x=500, 세로중앙 y=110) -->
+                      <line x1="500" y1="146" x2="600" y2="146" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- 도당운영위원회 → 도당위원장 -->
+                      <line x1="390" y1="166" x2="390" y2="184" stroke="#FFB07A" stroke-width="2"/>
+                      <circle cx="390" cy="188" r="4" fill="#FF5E00"/>
+                      <line x1="390" y1="192" x2="390" y2="201" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- 도당위원장 → 사무처 -->
+                      <line x1="390" y1="301" x2="390" y2="319" stroke="#FFB07A" stroke-width="2"/>
+                      <circle cx="390" cy="323" r="4" fill="#FF5E00"/>
+                      <line x1="390" y1="327" x2="390" y2="336" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- 사무처 → 4본부 기둥 (이 기둥 위의 점에서 부위원장으로도 분기) -->
+                      <line x1="390" y1="396" x2="390" y2="414" stroke="#FFB07A" stroke-width="2"/>
+                      <circle cx="390" cy="418" r="4" fill="#FF5E00"/>
+                      <line x1="390" y1="422" x2="390" y2="486" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- 메인 기둥의 점(390,382) → 부위원장 (가로 직선 한 번으로 연결, 꺾임 없음) -->
+                      <line x1="390" y1="418" x2="600" y2="418" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- 4본부 가로 분기선 (본부 중앙 x: 100, 300, 500, 700) -->
+                      <line x1="100" y1="486" x2="700" y2="486" stroke="#FFB07A" stroke-width="2"/>
+                      <line x1="100" y1="486" x2="100" y2="506" stroke="#FFB07A" stroke-width="2"/>
+                      <line x1="300" y1="486" x2="300" y2="506" stroke="#FFB07A" stroke-width="2"/>
+                      <line x1="500" y1="486" x2="500" y2="506" stroke="#FFB07A" stroke-width="2"/>
+                      <line x1="700" y1="486" x2="700" y2="506" stroke="#FFB07A" stroke-width="2"/>
+
+                      <!-- ── 도당대회  (cx=390, w=180, h=44) ── -->
+                      <rect x="245" y="20" width="290" height="80" rx="14" fill="url(#og)"/>
+                      <text x="390" y="60" text-anchor="middle" dominant-baseline="middle" font-size="1.625em" font-weight="900" fill="#fff">도당대회</text>
+
+                      <!-- ── 도당운영위원회  (cx=390, w=220, h=40) ── -->
+                      <rect x="280" y="126" width="220" height="40" rx="10" fill="url(#og2)"/>
+                      <text x="390" y="146" text-anchor="middle" dominant-baseline="middle" font-size="0.875em" font-weight="900" fill="#fff">도당운영위원회</text>
+
+                      <!-- ── 운영위원 박스  (x=600, w=160, h=90) ── -->
+                      <!-- 테두리 전체 -->
+                      <rect x="600" y="114" width="160" height="90" rx="10" fill="#fff" stroke="#FF5E00" stroke-width="2"/>
+                      <!-- 헤더 채움 (상단 rounded + 아래는 직각으로 채움) -->
+                      <rect x="600" y="114" width="160" height="34" rx="10" fill="url(#og2)"/>
+                      <rect x="600" y="134" width="160" height="14" fill="url(#og2)"/>
+                      <!-- 헤더 텍스트 -->
+                      <text x="680" y="131" text-anchor="middle" dominant-baseline="middle" font-size="0.8125em" font-weight="900" fill="#fff">운영위원</text>
+                      <!-- 이름 목록 -->
+                      <text x="680" y="164" text-anchor="middle" dominant-baseline="middle" font-size="0.75em" font-weight="700" fill="#C44200">이은창</text>
+                      <text x="680" y="182" text-anchor="middle" dominant-baseline="middle" font-size="0.75em" font-weight="700" fill="#C44200">이성진</text>
+                      <text x="680" y="198" text-anchor="middle" dominant-baseline="middle" font-size="0.75em" font-weight="700" fill="#C44200">김기희</text>
+
+                      <!-- ── 도당위원장  (cx=390, w=220, h=100) ── -->
+                      <rect x="280" y="201" width="220" height="100" rx="10" fill="#fff" stroke="#FF5E00" stroke-width="2"/>
+                      <rect x="280" y="201" width="220" height="38" rx="10" fill="url(#og)"/>
+                      <rect x="280" y="229" width="220" height="10" fill="url(#og)"/>
+                      <text x="390" y="220" text-anchor="middle" dominant-baseline="middle" font-size="0.9375em" font-weight="900" fill="#fff">도당위원장</text>
+                      <!-- 직무대행 뱃지 -->
+                      <rect x="340" y="248" width="100" height="22" rx="11" fill="#FF5E00"/>
+                      <text x="390" y="259" text-anchor="middle" dominant-baseline="middle" font-size="0.6875em" font-weight="800" fill="#fff" letter-spacing="1">직무대행</text>
+                      <!-- 이름 -->
+                      <text x="390" y="287" text-anchor="middle" dominant-baseline="middle" font-size="1.375em" font-weight="900" fill="#FF5E00">이은창</text>
+
+                      <!-- ── 사무처  (cx=390, w=220, h=60) ── -->
+                      <rect x="280" y="336" width="220" height="60" rx="10" fill="#fff" stroke="#FF5E00" stroke-width="2"/>
+                      <rect x="280" y="336" width="220" height="32" rx="10" fill="url(#og)"/>
+                      <rect x="280" y="356" width="220" height="12" fill="url(#og)"/>
+                      <text x="390" y="352" text-anchor="middle" dominant-baseline="middle" font-size="0.9375em" font-weight="900" fill="#fff">사 무 처</text>
+                      <text x="390" y="380" text-anchor="middle" dominant-baseline="middle" font-size="0.75em" font-weight="700" fill="#C44200">사무처장  000</text>
+
+                      <!-- ── 부위원장  (x=600, w=160, h=60) ── -->
+                      <rect x="600" y="388" width="160" height="60" rx="10" fill="#fff" stroke="#FF5E00" stroke-width="2"/>
+                      <rect x="600" y="388" width="160" height="32" rx="10" fill="url(#og)"/>
+                      <rect x="600" y="408" width="160" height="12" fill="url(#og)"/>
+                      <text x="680" y="404" text-anchor="middle" dominant-baseline="middle" font-size="0.875em" font-weight="900" fill="#fff">부위원장</text>
+                      <text x="680" y="432" text-anchor="middle" dominant-baseline="middle" font-size="0.75em" font-weight="700" fill="#C44200">000</text>
+
+                      <!-- ── 당협조직본부  (cx=100, w=176) ── -->
+                      <rect x="12" y="506" width="176" height="38" rx="10" fill="url(#og)"/>
+                      <text x="100" y="525" text-anchor="middle" dominant-baseline="middle" font-size="0.8125em" font-weight="900" fill="#fff">당협조직본부</text>
+                      <rect x="12" y="552" width="176" height="148" rx="10" fill="#fff" stroke="#FFB07A" stroke-width="1.5"/>
+                      <text x="26" y="574" dominant-baseline="middle" font-size="0.75em" font-weight="800" fill="#FF5E00">천안시 병</text>
+                      <text x="26" y="592" dominant-baseline="middle" font-size="0.75em" font-weight="600" fill="#374151">이성진</text>
+                      <text x="26" y="614" dominant-baseline="middle" font-size="0.75em" font-weight="800" fill="#FF5E00">공주시·부여군·청양군</text>
+                      <text x="26" y="632" dominant-baseline="middle" font-size="0.75em" font-weight="600" fill="#374151">이은창</text>
+                      <text x="26" y="654" dominant-baseline="middle" font-size="0.75em" font-weight="800" fill="#FF5E00">홍성군·예산군</text>
+                      <text x="26" y="672" dominant-baseline="middle" font-size="0.75em" font-weight="600" fill="#374151">김기희</text>
+
+                      <!-- ── 대변인단  (cx=300, w=176) ── -->
+                      <rect x="212" y="506" width="176" height="38" rx="10" fill="url(#og)"/>
+                      <text x="300" y="525" text-anchor="middle" dominant-baseline="middle" font-size="0.8125em" font-weight="900" fill="#fff">대 변 인 단</text>
+                      <rect x="212" y="552" width="176" height="60" rx="10" fill="#fff" stroke="#FFB07A" stroke-width="1.5"/>
+                      <text x="226" y="576" dominant-baseline="middle" font-size="0.75em" font-weight="800" fill="#FF5E00">대변인</text>
+                      <text x="226" y="598" dominant-baseline="middle" font-size="0.75em" font-weight="600" fill="#374151">고재윤</text>
+
+                      <!-- ── 조직총괄본부  (cx=500, w=176) ── -->
+                      <rect x="412" y="506" width="176" height="38" rx="10" fill="url(#og)"/>
+                      <text x="500" y="525" text-anchor="middle" dominant-baseline="middle" font-size="0.8125em" font-weight="900" fill="#fff">조직총괄본부</text>
+                      <rect x="412" y="552" width="176" height="60" rx="10" fill="#fff" stroke="#FFB07A" stroke-width="1.5"/>
+
+                      <!-- ── 정책개발본부  (cx=700, w=176) ── -->
+                      <rect x="612" y="506" width="176" height="38" rx="10" fill="url(#og)"/>
+                      <text x="700" y="525" text-anchor="middle" dominant-baseline="middle" font-size="0.8125em" font-weight="900" fill="#fff">정책개발본부</text>
+                      <rect x="612" y="552" width="176" height="60" rx="10" fill="#fff" stroke="#FFB07A" stroke-width="1.5"/>
+                    </svg>
                     </div>
+
+                    <p class="text-center text-[12px] text-gray-400 dark:text-gray-600 mt-10 pb-4">※ 조직 구성은 변경될 수 있습니다.</p>
                 </section>
 
+
                 <!-- 3. 당사안내 섹션 (기본 숨김) -->
-                <section id="section-about" class="max-w-[1200px] mx-auto px-4 hidden">
+                <section id="section-about" class="max-w-[1200px] mx-auto px-4 hidden" role="tabpanel" aria-labelledby="tab-btn-about" tabindex="0">
                     <!-- 브레드크럼 -->
                     <div class="text-[13px] text-gray-500 dark:text-gray-400 mb-6 font-medium">
-                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-400 dark:text-gray-500">시당소개</span> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-800 dark:text-gray-200 font-semibold">오시는 길</span>
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-400 dark:text-gray-500">시당소개</span> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-800 dark:text-gray-200 font-semibold">오시는 길</span>
                     </div>
 
                     <div class="text-center mb-10">
@@ -698,28 +913,42 @@
         </div>
 
         <!-- ==========================================
-             VIEW 2-1: 공지 및 보도자료 (별도 페이지)
+             VIEW 2-1: 소식 (공지사항 / 보도자료 통합, 별도 페이지)
         =========================================== -->
         <div id="view-notice" class="hidden pb-16">
 
+            <!-- 서브페이지 히어로 배너 -->
+            <div class="relative overflow-hidden" style="background:linear-gradient(120deg,#1a2233 0%,#2d3a4a 60%,#3a2010 100%);min-height:140px;">
+                <div style="position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,94,0,0.10);"></div>
+                <div style="position:absolute;left:30%;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,94,0,0.07);"></div>
+                <div class="max-w-[1200px] mx-auto px-6 py-10 relative z-10">
+                    <div class="text-[13px] text-white/50 mb-2 font-medium flex items-center gap-1">
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-white/80 transition-colors">홈</a>
+                        <svg class="inline w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <span id="notice-hero-breadcrumb" class="text-white/70">공지사항</span>
+                    </div>
+                    <h1 id="notice-hero-title" class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-1">공지사항</h1>
+                    <p id="notice-hero-desc" class="text-white/60 text-[14px]">개혁신당 충청남도당의 새로운 소식을 전해드립니다</p>
+                </div>
+            </div>
             <!-- 탭 메뉴(서브 네비게이션) -->
             <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors">
-                <div class="max-w-[1200px] mx-auto px-4 flex space-x-4">
-                    <button id="tab-btn-noticelist" class="py-4 text-[15px] font-bold text-reform-500 border-b-[3px] border-reform-500">공지사항</button>
-                    <button id="tab-btn-press" class="py-4 text-[15px] font-bold text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors border-b-[3px] border-transparent">보도자료</button>
+                <div class="max-w-[1200px] mx-auto px-4 flex space-x-1" role="tablist" aria-label="소식 탭">
+                    <button id="tab-btn-noticelist" role="tab" aria-selected="true" aria-controls="section-noticelist" class="relative py-4 px-4 text-[15px] font-bold text-reform-500 border-b-[3px] border-reform-500 transition-colors">공지사항</button>
+                    <button id="tab-btn-press" role="tab" aria-selected="false" aria-controls="section-press" class="relative py-4 px-4 text-[15px] font-bold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border-b-[3px] border-transparent">보도자료</button>
                 </div>
             </div>
 
-            <div class="py-10 sm:py-16">
+            <div class="py-8 sm:py-12">
                 <!-- 1. 공지사항 섹션 -->
-                <section id="section-noticelist" class="max-w-[1200px] mx-auto px-4">
+                <section id="section-noticelist" class="max-w-[1200px] mx-auto px-4" role="tabpanel" aria-labelledby="tab-btn-noticelist" tabindex="0">
                     <!-- 브레드크럼 -->
                     <div class="text-[13px] text-gray-500 dark:text-gray-400 mb-6 font-medium">
-                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-400 dark:text-gray-500">공지 및 보도자료</span> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-800 dark:text-gray-200 font-semibold">공지사항</span>
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-400 dark:text-gray-500">소식</span> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-800 dark:text-gray-200 font-semibold">공지사항</span>
                     </div>
 
                     <!-- 제목 -->
-                    <div class="text-center mb-12">
+                    <div class="text-center mb-8">
                         <h2 class="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
                             공지사항
                         </h2>
@@ -770,14 +999,14 @@
                 </section>
 
                 <!-- 2. 보도자료 섹션 (기본 숨김) -->
-                <section id="section-press" class="max-w-[1200px] mx-auto px-4 hidden">
+                <section id="section-press" class="max-w-[1200px] mx-auto px-4 hidden" role="tabpanel" aria-labelledby="tab-btn-press" tabindex="0">
                     <!-- 브레드크럼 -->
                     <div class="text-[13px] text-gray-500 dark:text-gray-400 mb-6 font-medium">
-                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-400 dark:text-gray-500">공지 및 보도자료</span> <span class="mx-1 text-gray-300 dark:text-gray-600">&gt;</span> <span class="text-gray-800 dark:text-gray-200 font-semibold">보도자료</span>
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-reform-500 transition-colors">홈</a> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-400 dark:text-gray-500">소식</span> <span class="mx-1 text-gray-300 dark:text-gray-600" aria-hidden="true"><svg class="inline w-3 h-3 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></span> <span class="text-gray-800 dark:text-gray-200 font-semibold">보도자료</span>
                     </div>
 
                     <!-- 제목 -->
-                    <div class="text-center mb-12">
+                    <div class="text-center mb-8">
                         <h2 class="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
                             보도자료
                         </h2>
@@ -833,10 +1062,21 @@
              VIEW 3: 개인정보 처리방침
         =========================================== -->
         <div id="view-privacy" class="hidden pb-16">
-            <div class="max-w-[800px] mx-auto px-4 py-16 lg:py-20">
-                <h1 class="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">개인정보 처리방침</h1>
-                <p class="text-gray-500 dark:text-gray-400 mb-2">개혁신당 충청남도당(이하 "도당")은 다음과 같은 기준으로 이용자의 개인정보를 안전하게 관리합니다.</p>
-                <p class="text-gray-400 dark:text-gray-500 text-sm mb-8">시행일: 2026년 7월 1일 &nbsp;|&nbsp; 최종 개정일: 2026년 7월 1일</p>
+            <!-- 서브페이지 히어로 배너 -->
+            <div class="relative overflow-hidden" style="background:linear-gradient(120deg,#1a2233 0%,#2d3a4a 60%,#3a2010 100%);min-height:140px;">
+                <div style="position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,94,0,0.10);"></div>
+                <div style="position:absolute;left:30%;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,94,0,0.07);"></div>
+                <div class="max-w-[1200px] mx-auto px-6 py-10 relative z-10">
+                    <div class="text-[13px] text-white/50 mb-2 font-medium flex items-center gap-1">
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-white/80 transition-colors">홈</a>
+                        <svg class="inline w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <span class="text-white/70">개인정보 처리방침</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-1">개인정보 처리방침</h1>
+                    <p class="text-white/60 text-[14px]">개혁신당 충청남도당의 개인정보 보호 정책을 안내합니다</p>
+                </div>
+            </div>
+            <div class="max-w-[800px] mx-auto px-4 py-10 lg:py-12">
 
                 <!-- 타임라인형 본문 -->
                 <div class="relative pl-10 space-y-10 text-gray-700 dark:text-gray-300 leading-relaxed break-keep before:content-[''] before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-[2px] before:bg-gray-200 dark:before:bg-gray-700">
@@ -914,9 +1154,21 @@
              VIEW 4: 이용약관
         =========================================== -->
         <div id="view-terms" class="hidden pb-16">
-            <div class="max-w-[800px] mx-auto px-4 py-16 lg:py-20">
-                <h1 class="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mb-3 tracking-tight">이용약관</h1>
-                <p class="text-gray-500 dark:text-gray-400 mb-2">개혁신당 충청남도당 웹사이트(reform-chungnam.kr) 이용에 관한 약관입니다.</p>
+            <!-- 서브페이지 히어로 배너 -->
+            <div class="relative overflow-hidden" style="background:linear-gradient(120deg,#1a2233 0%,#2d3a4a 60%,#3a2010 100%);min-height:140px;">
+                <div style="position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,94,0,0.10);"></div>
+                <div style="position:absolute;left:30%;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,94,0,0.07);"></div>
+                <div class="max-w-[1200px] mx-auto px-6 py-10 relative z-10">
+                    <div class="text-[13px] text-white/50 mb-2 font-medium flex items-center gap-1">
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-white/80 transition-colors">홈</a>
+                        <svg class="inline w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <span class="text-white/70">이용약관</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-1">이용약관</h1>
+                    <p class="text-white/60 text-[14px]">충청남도당 웹사이트 이용에 관한 약관입니다</p>
+                </div>
+            </div>
+            <div class="max-w-[800px] mx-auto px-4 py-10 lg:py-12">
                 <p class="text-gray-400 dark:text-gray-500 text-sm mb-10">시행일: 2026년 7월 1일</p>
 
                 <div class="space-y-10 text-gray-700 dark:text-gray-300 leading-relaxed break-keep">
@@ -948,7 +1200,7 @@
                                 <h4 class="font-bold text-black dark:text-white mb-1">제4조 (서비스의 내용)</h4>
                                 <ul class="text-sm list-disc list-inside space-y-1">
                                     <li>도당 소개 및 인사말 안내</li>
-                                    <li>공지 및 보도자료 제공</li>
+                                    <li>소식(공지사항·보도자료) 제공</li>
                                     <li>현수막 문구·정책 제안 접수</li>
                                     <li>당원 가입 안내 및 연결 서비스</li>
                                     <li>후원 안내</li>
@@ -1018,6 +1270,93 @@
             </div>
         </div>
 
+        <!-- ==========================================
+             VIEW 5: 인물
+        =========================================== -->
+        <div id="view-people" class="hidden pb-16">
+            <!-- 서브페이지 히어로 배너 -->
+            <div class="relative overflow-hidden" style="background:linear-gradient(120deg,#1a2233 0%,#2d3a4a 60%,#3a2010 100%);min-height:140px;">
+                <div style="position:absolute;right:-40px;top:-40px;width:260px;height:260px;border-radius:50%;background:rgba(255,94,0,0.10);"></div>
+                <div style="position:absolute;left:30%;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,94,0,0.07);"></div>
+                <div class="max-w-[1200px] mx-auto px-6 py-10 relative z-10">
+                    <div class="text-[13px] text-white/50 mb-2 font-medium flex items-center gap-1">
+                        <a href="#" onclick="switchView('view-home'); return false;" class="hover:text-white/80 transition-colors">홈</a>
+                        <svg class="inline w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <span class="text-white/70">인물</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight mb-1">인물</h1>
+                    <p class="text-white/60 text-[14px]">개혁신당 충청남도당과 함께하는 사람들</p>
+                </div>
+            </div>
+            <div class="max-w-[1200px] mx-auto px-4 py-10 lg:py-12">
+
+                <!-- 인물 카드 그리드 -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-7">
+                    <!-- 카드: 이은창 -->
+                    <button type="button" onclick="openPeopleModal('lee-eunchang')" class="group relative text-left bg-white dark:bg-gray-900 rounded-[28px] overflow-hidden shadow-md ring-1 ring-black/5 dark:ring-white/10 hover:shadow-2xl hover:shadow-orange-900/20 hover:-translate-y-2 transition-all duration-300 ease-out">
+                        <div class="people-card-photo relative aspect-[3/4] w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+                            <img src="https://i.imgur.com/yP4ncGr.png" alt="이은창" class="w-full h-full object-cover group-hover:scale-[1.08] transition-transform duration-700 ease-out">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/0 group-hover:from-black/90 transition-all duration-300"></div>
+                            <div class="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-reform-500/50 transition-all duration-300 rounded-t-[28px]"></div>
+                            <div class="people-card-badges absolute top-3.5 left-3.5 flex flex-wrap gap-1.5" data-people-id="lee-eunchang"></div>
+                            <div class="absolute bottom-0 left-0 right-0 p-4">
+                                <h3 class="text-[15px] sm:text-[18px] font-black text-white tracking-tight drop-shadow-md">이은창</h3>
+                                <p class="people-card-subtitle text-[12px] text-white/70 mt-1 truncate" data-people-id="lee-eunchang"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-t border-gray-50 dark:border-gray-800">
+                            <span class="text-[12px] font-bold text-gray-400 dark:text-gray-500 group-hover:text-reform-500 transition-colors">프로필 보기</span>
+                            <span class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-reform-500 transition-colors duration-300">
+                                <svg aria-hidden="true" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </span>
+                        </div>
+                    </button>
+
+                    <!-- 카드: 이성진 -->
+                    <button type="button" onclick="openPeopleModal('lee-seongjin')" class="group relative text-left bg-white dark:bg-gray-900 rounded-[28px] overflow-hidden shadow-md ring-1 ring-black/5 dark:ring-white/10 hover:shadow-2xl hover:shadow-orange-900/20 hover:-translate-y-2 transition-all duration-300 ease-out">
+                        <div class="people-card-photo relative aspect-[3/4] w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+                            <img src="https://i.imgur.com/g3zvOOa.png" alt="이성진" class="w-full h-full object-cover group-hover:scale-[1.08] transition-transform duration-700 ease-out">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/0 group-hover:from-black/90 transition-all duration-300"></div>
+                            <div class="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-reform-500/50 transition-all duration-300 rounded-t-[28px]"></div>
+                            <div class="people-card-badges absolute top-3.5 left-3.5 flex flex-wrap gap-1.5" data-people-id="lee-seongjin"></div>
+                            <div class="absolute bottom-0 left-0 right-0 p-4">
+                                <h3 class="text-[15px] sm:text-[18px] font-black text-white tracking-tight drop-shadow-md">이성진</h3>
+                                <p class="people-card-subtitle text-[12px] text-white/70 mt-1 truncate" data-people-id="lee-seongjin"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-t border-gray-50 dark:border-gray-800">
+                            <span class="text-[12px] font-bold text-gray-400 dark:text-gray-500 group-hover:text-reform-500 transition-colors">프로필 보기</span>
+                            <span class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-reform-500 transition-colors duration-300">
+                                <svg aria-hidden="true" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </span>
+                        </div>
+                    </button>
+
+                    <!-- 카드: 고재윤 -->
+                    <button type="button" onclick="openPeopleModal('go-jaeyun')" class="group relative text-left bg-white dark:bg-gray-900 rounded-[28px] overflow-hidden shadow-md ring-1 ring-black/5 dark:ring-white/10 hover:shadow-2xl hover:shadow-orange-900/20 hover:-translate-y-2 transition-all duration-300 ease-out">
+                        <div class="people-card-photo relative aspect-[3/4] w-full overflow-hidden bg-gray-100 dark:bg-gray-800">
+                            <img src="https://i.imgur.com/Fyk1Di8.png" alt="고재윤" class="w-full h-full object-cover group-hover:scale-[1.08] transition-transform duration-700 ease-out">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-black/0 group-hover:from-black/90 transition-all duration-300"></div>
+                            <div class="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-reform-500/50 transition-all duration-300 rounded-t-[28px]"></div>
+                            <div class="people-card-badges absolute top-3.5 left-3.5 flex flex-wrap gap-1.5" data-people-id="go-jaeyun"></div>
+                            <div class="absolute bottom-0 left-0 right-0 p-4">
+                                <h3 class="text-[15px] sm:text-[18px] font-black text-white tracking-tight drop-shadow-md">고재윤</h3>
+                                <p class="people-card-subtitle text-[12px] text-white/70 mt-1 truncate" data-people-id="go-jaeyun"></p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-t border-gray-50 dark:border-gray-800">
+                            <span class="text-[12px] font-bold text-gray-400 dark:text-gray-500 group-hover:text-reform-500 transition-colors">프로필 보기</span>
+                            <span class="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center group-hover:bg-reform-500 transition-colors duration-300">
+                                <svg aria-hidden="true" class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </span>
+                        </div>
+                    </button>
+                </div>
+
+                <p class="text-center text-[12px] text-gray-400 dark:text-gray-600 mt-10">※ 임시 게재된 내용으로, 추후 변경될 수 있습니다.</p>
+            </div>
+        </div>
+
     </main>
 
     <!-- 새로운 고급스러운 푸터 -->
@@ -1034,7 +1373,7 @@
                     </div>
 
                     <!-- 시/도당 바로가기 드롭다운 -->
-                    <p style="font-size:12px;color:#9ca3af;margin:8px 0 18px;line-height:1.8;">오늘보다 더 나은 내일을 만들겠습니다, 개혁신당<br>위원장 직무대행 <strong style="color:#d1d5db;font-weight:600;">이은창</strong></p>
+                    <p style="font-size:12px;color:#d1d5db;margin:8px 0 18px;line-height:1.8;">오늘보다 더 나은 내일을 만들겠습니다, 개혁신당<br>위원장 직무대행 <strong style="color:#f3f4f6;font-weight:600;">이은창</strong></p>
                     <div class="relative inline-block" id="sido-dropdown-wrap">
                         <button type="button" id="sido-dropdown-btn" onclick="toggleSidoDropdown()" aria-haspopup="true" aria-expanded="false" aria-controls="sido-dropdown-menu"
                             class="flex items-center gap-2 px-4 py-2 border border-gray-600 text-sm font-bold text-gray-300 hover:border-reform-500 hover:text-reform-500 transition-colors bg-transparent">
@@ -1048,6 +1387,33 @@
                             <a href="https://reformseoul.kr/" target="_blank" rel="noopener" class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-t border-gray-100 dark:border-gray-700">서울시당</a>
                         </div>
                     </div>
+
+                    <!-- 연관사이트 바로가기 드롭다운 -->
+                    <div class="relative inline-block mt-2 ml-2 sm:ml-0 sm:mt-2" id="related-dropdown-wrap">
+                        <button type="button" id="related-dropdown-btn" onclick="toggleRelatedDropdown()" aria-haspopup="true" aria-expanded="false" aria-controls="related-dropdown-menu"
+                            class="flex items-center gap-2 px-4 py-2 border border-gray-600 text-sm font-bold text-gray-300 hover:border-reform-500 hover:text-reform-500 transition-colors bg-transparent">
+                            연관사이트
+                            <svg id="related-dropdown-icon" aria-hidden="true" focusable="false" class="w-3.5 h-3.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="related-dropdown-menu" class="hidden absolute left-0 top-full mt-1.5 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-xl z-50 overflow-hidden">
+                            <a href="https://www.assembly.go.kr/" target="_blank" rel="noopener" class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">대한민국 국회</a>
+                            <a href="https://council.chungnam.go.kr/" target="_blank" rel="noopener" class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-t border-gray-100 dark:border-gray-700">충청남도 의회</a>
+                            <a href="https://www.chungnam.go.kr/main.do" target="_blank" rel="noopener" class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-t border-gray-100 dark:border-gray-700">충청남도청</a>
+                            <a href="https://www.nec.go.kr/site/nec/main.do" target="_blank" rel="noopener" class="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border-t border-gray-100 dark:border-gray-700">중앙선관위</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 연락처 -->
+                <div class="md:col-span-5">
+                    <h4 class="text-white font-bold mb-3 text-[15px]">연락처</h4>
+                    <ul class="space-y-2 text-[13px] text-gray-200 leading-relaxed">
+                        <li>충청남도 아산시 배방읍 공원로 69 상가 204호<br>(31467) (아산배방LH4단지)</li>
+                        <li>고유번호: 000-00-00000</li>
+                        <li>이메일: contact@reform-chungnam.kr</li>
+                    </ul>
                 </div>
 
                 <!-- SNS -->
@@ -1070,28 +1436,29 @@
                             <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                         </a>
                     </div>
-                </div>
 
-                <!-- 연락처 -->
-                <div class="md:col-span-5">
-                    <h4 class="text-white font-bold mb-3 text-[15px]">연락처</h4>
-                    <ul class="space-y-2 text-[13px] text-gray-300">
-                        <li>충청남도 아산시 배방읍 공원로 69 상가 204호<br>(31467) (아산배방LH4단지)</li>
-                        <li>고유번호: 000-00-00000</li>
-                        <li>이메일: contact@reform-chungnam.kr</li>
-                    </ul>
+                    <!-- 약관/카피라이트 (PC: SNS 하단, 모바일: 하단 별도 블록에 표시) -->
+                    <div class="hidden md:block mt-5">
+                        <div class="flex flex-wrap items-center gap-2 text-[12px] text-gray-300 mb-2">
+                            <a href="#" onclick="switchView('view-terms'); return false;" class="hover:text-white transition-colors whitespace-nowrap">이용약관</a>
+                            <span class="w-[1px] h-3 bg-gray-600"></span>
+                            <a href="#" onclick="switchView('view-privacy'); return false;" class="hover:text-white transition-colors whitespace-nowrap">개인정보 처리방침</a>
+                        </div>
+                        <p class="text-[11px] text-gray-400 mb-1 leading-relaxed whitespace-nowrap">홈페이지 관리자: admin@reform-chungnam.kr</p>
+                        <p class="text-[11px] text-gray-400 leading-relaxed whitespace-nowrap">© 2026 개혁신당 충청남도당. All rights reserved.</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- 하단 카피라이트 및 약관 -->
-            <div class="border-t border-gray-700/50 pt-5 flex flex-col items-center justify-center text-center">
+            <!-- 하단 카피라이트 및 약관 (모바일 전용) -->
+            <div class="md:hidden border-t border-gray-700/50 pt-5 flex flex-col items-center justify-center text-center">
                 <div class="flex items-center space-x-4 text-[13px] text-gray-300 mb-2">
                     <a href="#" onclick="switchView('view-terms'); return false;" class="hover:text-white transition-colors">이용약관</a>
                     <span class="w-[1px] h-3 bg-gray-600"></span>
                     <a href="#" onclick="switchView('view-privacy'); return false;" class="hover:text-white transition-colors">개인정보 처리방침</a>
                 </div>
-                <p class="text-[12px] text-gray-400 mb-1">홈페이지 관리자: admin@reform-chungnam.kr</p>
-                <p class="text-[12px] text-gray-400">© 2026 개혁신당 충청남도당. All rights reserved.</p>
+                <p class="text-[12px] text-gray-300 mb-1">홈페이지 관리자: admin@reform-chungnam.kr</p>
+                <p class="text-[12px] text-gray-300">© 2026 개혁신당 충청남도당. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -1121,7 +1488,7 @@
     <!-- 공지사항 상세보기 모달 -->
     <div id="notice-modal-overlay" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden opacity-0 transition-opacity duration-300" onclick="closeNoticeModal()"></div>
     <div id="notice-modal" role="dialog" aria-modal="true" aria-labelledby="notice-modal-title" class="fixed inset-0 z-[91] hidden items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-900 w-full max-w-[700px] max-h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform scale-95 opacity-0 transition-all duration-300" id="notice-modal-panel">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-[700px] max-h-[90vh] sm:max-h-[85vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform scale-95 opacity-0 transition-all duration-300" id="notice-modal-panel">
             <!-- 모달 헤더 -->
             <div class="flex items-start justify-between gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-gray-100 dark:border-gray-800">
                 <div class="min-w-0">
@@ -1151,7 +1518,179 @@
         </div>
     </div>
 
-    <!-- 이메일무단수집거부 모달 -->
+    <!-- 인물 상세 팝업 (모바일·PC 공용) -->
+    <div id="people-modal-overlay"
+         class="fixed inset-0 bg-black/60 z-[90] hidden opacity-0 transition-opacity duration-300"
+         onclick="closePeopleModal()"></div>
+
+    <div id="people-modal"
+         role="dialog" aria-modal="true" aria-labelledby="people-modal-name"
+         class="fixed inset-0 z-[91] hidden items-center justify-center p-4 sm:p-8">
+
+        <div id="people-modal-panel"
+             class="bg-white dark:bg-gray-900 w-full max-w-[560px] rounded-2xl shadow-2xl overflow-hidden
+                    flex flex-col sm:flex-row
+                    transform scale-95 opacity-0 transition-all duration-300
+                    max-h-[88vh] sm:max-h-[80vh]">
+
+            <!-- 사진: 모바일=상단 고정높이 / PC=좌측 세로 전체 -->
+            <div class="h-[160px] sm:h-auto sm:w-[42%] shrink-0 bg-gray-50 dark:bg-gray-800">
+                <img id="people-modal-photo" src="" alt=""
+                     class="w-full h-full object-contain object-top">
+            </div>
+
+            <!-- 우측(PC) / 하단(모바일) 본문 -->
+            <div class="flex-1 min-h-0 flex flex-col overflow-hidden">
+
+                <!-- 헤더: 이름 + 닫기 -->
+                <div class="flex items-start justify-between gap-3 px-5 pt-5 pb-3 sm:px-6 sm:pt-6">
+                    <div class="min-w-0">
+                        <div id="people-modal-status" class="flex flex-wrap gap-1.5 mb-2"></div>
+                        <h3 id="people-modal-name"
+                            class="text-[22px] sm:text-2xl font-black text-gray-900 dark:text-white leading-snug break-keep"></h3>
+                    </div>
+                    <button type="button" onclick="closePeopleModal()" aria-label="닫기"
+                            class="shrink-0 mt-1 w-8 h-8 flex items-center justify-center rounded-full
+                                   text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800
+                                   hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 약력 (스크롤 영역) -->
+                <div class="flex-1 overflow-y-auto px-5 pb-4 sm:px-6">
+                    <p class="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2.5">약력</p>
+                    <ul id="people-modal-bio"
+                        class="space-y-2 text-[13px] sm:text-[14px] text-gray-700 dark:text-gray-300 break-keep"></ul>
+                </div>
+
+                <!-- SNS -->
+                <div class="px-5 py-4 sm:px-6 border-t border-gray-100 dark:border-gray-800">
+                    <div id="people-modal-sns" class="flex items-center gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 지정후원(계좌) 안내 모달 -->
+    <div id="donate-modal-overlay" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden opacity-0 transition-opacity duration-300" onclick="closeDonateModal()"></div>
+    <div id="donate-modal" role="dialog" aria-modal="true" aria-labelledby="donate-modal-title" class="fixed inset-0 z-[91] hidden items-center justify-center p-4 lg:p-6">
+        <div class="bg-white dark:bg-gray-900 w-full max-w-[480px] lg:max-w-[900px] rounded-2xl shadow-2xl overflow-visible flex flex-col transform scale-95 opacity-0 transition-all duration-300" id="donate-modal-panel">
+            <!-- 모달 헤더 -->
+            <div class="flex items-start justify-between gap-4 px-6 sm:px-8 pt-6 sm:pt-8 pb-5 border-b border-gray-100 dark:border-gray-800">
+                <div class="min-w-0">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400 rounded-md mb-3">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path></svg>
+                        후원
+                    </span>
+                    <h3 id="donate-modal-title" class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white leading-snug break-keep">충남도당에 지정후원하기</h3>
+                </div>
+                <button type="button" onclick="closeDonateModal()" aria-label="닫기" class="shrink-0 w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+                    <svg aria-hidden="true" focusable="false" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- 모달 본문 -->
+            <div class="overflow-y-auto lg:overflow-visible">
+                <div class="flex flex-col lg:flex-row lg:divide-x lg:divide-gray-100 lg:dark:divide-gray-800">
+
+                    <!-- 좌측: 계좌 정보 -->
+                    <div class="px-6 sm:px-8 py-6 lg:py-8 lg:w-[42%] lg:flex-shrink-0 space-y-5 text-[15px] leading-relaxed text-gray-700 dark:text-gray-300 break-keep">
+                        <p class="text-gray-600 dark:text-gray-400">아래 계좌로 보내주시는 후원금은 개혁신당 충청남도당의 지역 정치 활동에 소중하게 쓰입니다. 회원님의 관심과 후원에 진심으로 감사드립니다.</p>
+
+                        <!-- 계좌정보 박스 -->
+                        <div class="bg-[#F8F6F1] dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+                            <p class="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">후원 계좌 (임시)</p>
+                            <div class="flex items-center justify-between gap-3 mb-1">
+                                <span id="donate-account-number" class="text-lg sm:text-xl font-black text-gray-900 dark:text-white tracking-tight">농협 123-4567-8901-23</span>
+                                <button type="button" onclick="copyDonateAccount()" id="donate-copy-btn" class="shrink-0 px-3 py-1.5 text-[12px] font-bold bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:border-reform-500 hover:text-reform-500 transition-colors">
+                                    복사
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">예금주: 개혁신당 충청남도당</p>
+                        </div>
+
+                        <!-- 후원 문의 -->
+                        <div class="flex items-center justify-between gap-3 px-1">
+                            <span class="text-sm font-bold text-gray-700 dark:text-gray-300">후원 문의</span>
+                            <a href="tel:041-000-0000" class="text-sm font-bold text-reform-500 hover:text-reform-600 transition-colors">041-000-0000</a>
+                        </div>
+
+                        <p class="text-[13px] text-gray-400 dark:text-gray-500">※ 위 계좌 정보는 임시 안내이며, 정식 후원 계좌 확정 시 변경될 수 있습니다. 연말 후원금 영수증 발급을 원하시면 성명·생년월일·후원 일자를 후원 문의처로 알려주세요.</p>
+                    </div>
+
+                    <!-- 우측: 후원 안내 정보 -->
+                    <div class="lg:flex-1">
+                        <div class="rounded-xl lg:rounded-none overflow-hidden border border-gray-200 dark:border-gray-700 lg:border-0 text-[13px] mx-6 mb-6 lg:mx-0 lg:mb-0">
+                            <div class="bg-reform-500 px-4 lg:px-6 py-2.5 lg:py-3.5 flex items-center gap-2">
+                                <svg class="w-3.5 h-3.5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span class="text-white font-bold text-[12px] tracking-wide">후원 안내</span>
+                            </div>
+                            <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                <!-- 한도 -->
+                                <div class="px-4 lg:px-6 py-3.5 bg-white dark:bg-gray-800 flex gap-3 items-start">
+                                    <span class="shrink-0 mt-0.5 w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-reform-500" fill="currentColor" viewBox="0 0 20 20"><path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/></svg>
+                                    </span>
+                                    <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                        <span class="font-bold text-gray-900 dark:text-white">후원 한도</span><br>
+                                        1인 최대 <span class="font-bold text-reform-500">500만원</span>까지 후원 가능하며, 여러 후원회 합산 <span class="font-bold text-reform-500">총 2,000만원</span> 한도 내에서 후원하실 수 있습니다.
+                                    </div>
+                                </div>
+                                <!-- 익명 후원 -->
+                                <div class="px-4 lg:px-6 py-3.5 bg-white dark:bg-gray-800 flex gap-3 items-start">
+                                    <span class="shrink-0 mt-0.5 w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-reform-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+                                    </span>
+                                    <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                        <span class="font-bold text-gray-900 dark:text-white">익명 후원</span><br>
+                                        1회 <span class="font-bold text-reform-500">10만원</span>, 연간 <span class="font-bold text-reform-500">120만원</span>까지 익명으로 후원하실 수 있습니다.
+                                    </div>
+                                </div>
+                                <!-- 세액공제 -->
+                                <div class="px-4 lg:px-6 py-3.5 bg-white dark:bg-gray-800 flex gap-3 items-start">
+                                    <span class="shrink-0 mt-0.5 w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-reform-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                    </span>
+                                    <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                        <span class="font-bold text-gray-900 dark:text-white">세액공제 혜택</span><br>
+                                        연간 <span class="font-bold text-reform-500">10만원</span>까지 연말정산 시 <span class="font-bold text-reform-500">전액 세액공제(환급)</span> 받으실 수 있습니다.
+                                    </div>
+                                </div>
+                                <!-- 당원 후원 -->
+                                <div class="px-4 lg:px-6 py-3.5 bg-orange-50 dark:bg-orange-900/10 flex gap-3 items-start">
+                                    <span class="shrink-0 mt-0.5 w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                                        <svg class="w-3.5 h-3.5 text-reform-500" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v1h-3zM4.75 12.094A5.973 5.973 0 004 15v1H1v-1a3 3 0 013.75-2.906z"/></svg>
+                                    </span>
+                                    <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                        <span class="font-bold text-gray-900 dark:text-white">당원도 후원 가능</span><br>
+                                        당원도 후원금 납부가 가능합니다. 다만, 후원금은 당원 가입 또는 당비 납부와 <span class="font-bold">무관</span>합니다.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 후원 불가 대상 -->
+                            <div class="bg-gray-50 dark:bg-gray-900 px-4 lg:px-6 py-3.5 flex gap-2.5 items-start border-t border-gray-200 dark:border-gray-700">
+                                <svg class="w-3.5 h-3.5 text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                <p class="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                                    <span class="font-bold text-gray-600 dark:text-gray-300">후원 불가 대상</span> — 외국인, 국내외 법인 또는 단체, 당원이 될 수 없는 공무원 및 사립학교 교원은 후원하실 수 없습니다.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 모달 하단 -->
+            <div class="px-6 sm:px-8 py-5 border-t border-gray-100 dark:border-gray-800 flex justify-end rounded-b-2xl bg-white dark:bg-gray-900">
+                <button type="button" onclick="closeDonateModal()" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 font-bold text-sm rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="email-refusal-overlay" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden opacity-0 transition-opacity duration-300" onclick="closeEmailRefusalModal()"></div>
     <div id="email-refusal-modal" class="fixed inset-0 z-[91] hidden items-center justify-center p-4">
         <div id="email-refusal-panel" class="bg-white dark:bg-gray-900 w-full max-w-[520px] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform scale-95 opacity-0 transition-all duration-300">
@@ -1236,16 +1775,19 @@
         </div>
     </div>
 
+    <script src="board-data.js?v=1.0.0"></script>
+    <script src="people.js?v=1.0.0"></script>
     <script>
-        // 모달 접근성 공용 헬퍼: 포커스 가능한 요소 탐색, 포커스 트랩, 포커스 복원
-        function getModalFocusableEls(container) {
+        // 모달/메뉴 공용 접근성 헬퍼: 포커스 가능한 요소 탐색, 포커스 트랩, 포커스 복원
+        // (모바일 메뉴와 각종 모달에서 공통으로 사용 — 중복 정의하지 않고 하나만 둠)
+        function getFocusableEls(container) {
             return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'))
                 .filter(el => el.offsetParent !== null);
         }
 
         function trapModalFocus(e, panel) {
             if (e.key !== 'Tab') return;
-            const focusables = getModalFocusableEls(panel);
+            const focusables = getFocusableEls(panel);
             if (focusables.length === 0) return;
             const first = focusables[0];
             const last = focusables[focusables.length - 1];
@@ -1261,164 +1803,34 @@
 
         let noticeModalLastFocused = null;
         let feedbackModalLastFocused = null;
+        let donateModalLastFocused = null;
 
         function handleNoticeModalKeydown(e) {
+            if (e.key === 'Escape') {
+                closeNoticeModal();
+                return;
+            }
             trapModalFocus(e, document.getElementById('notice-modal-panel'));
         }
 
         function handleFeedbackModalKeydown(e) {
+            if (e.key === 'Escape') {
+                closeFeedbackModal();
+                return;
+            }
             trapModalFocus(e, document.getElementById('feedback-modal-panel'));
         }
 
-        // 공지사항 게시물 데이터
-        const noticeData = {
-            'notice-6': {
-                category: '공지',
-                categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-                title: '충청남도당 사무처 정기 휴무 안내',
-                date: '2026.06.20',
-                views: 33,
-                body: [
-                    '충청남도당 사무처는 매주 일요일 정기 휴무를 시행합니다. 평일 운영 시간은 오전 9시부터 오후 6시까지입니다.',
-                    '긴급한 문의사항은 이메일(contact@reform-chungnam.kr)로 남겨주시면 다음 영업일에 순차적으로 답변드립니다.'
-                ]
-            },
-            'notice-5': {
-                category: '일정',
-                categoryClass: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
-                title: '천안·아산 지역 당원 간담회 개최 일정 안내',
-                date: '2026.06.18',
-                views: 41,
-                body: [
-                    '천안·아산 지역 당원을 대상으로 간담회를 개최합니다. 지역 현안 및 당 활동 방향에 대한 자유로운 의견 교환의 자리가 될 예정입니다.',
-                    '참석을 원하시는 당원께서는 사무처로 사전 신청해 주시기 바랍니다.'
-                ]
-            },
-            'notice-4': {
-                category: '공지',
-                categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-                title: '홈페이지 개편에 따른 일부 서비스 점검 안내',
-                date: '2026.06.16',
-                views: 28,
-                body: [
-                    '보다 나은 서비스 제공을 위해 홈페이지 일부 기능을 점검할 예정입니다. 점검 시간 동안 일시적으로 접속이 원활하지 않을 수 있습니다.',
-                    '이용에 불편을 드려 죄송합니다. 점검은 최소한의 시간 내에 완료하도록 하겠습니다.'
-                ]
-            },
-            'notice-3': {
-                category: '공지',
-                categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-                title: '후원 계좌 안내 및 후원금 영수증 발급 절차',
-                date: '2026.06.16',
-                views: 72,
-                body: [
-                    '개혁신당 충청남도당을 후원해주시는 도민과 당원께 감사드립니다. 후원금은 정치자금법에 따라 투명하게 관리됩니다.',
-                    '연말 후원금 영수증 발급을 원하시는 분은 성명, 생년월일, 후원 일자를 사무처로 알려주시면 순차적으로 발급해 드립니다.'
-                ]
-            },
-            'notice-2': {
-                category: '공지',
-                categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-                title: '충청남도당 당원 입당 안내 및 절차 안내',
-                date: '2026.06.15',
-                views: 96,
-                body: [
-                    '개혁신당 충청남도당에 함께하실 당원을 모십니다. 입당은 개혁신당 공식 입당 페이지를 통해 온라인으로 간편하게 신청하실 수 있습니다.',
-                    '입당 시 이름, 생년월일, 휴대전화번호 등 기본 정보를 입력하시면 되며, 별도의 서류 제출 없이 온라인으로 절차가 진행됩니다.',
-                    '입당 관련 문의사항은 충청남도당 사무처로 연락 주시기 바랍니다.'
-                ],
-                cta: { label: '온라인 입당하기', href: 'https://home.reformparty.kr/auth/register' }
-            },
-            'notice-1': {
-                category: '일정',
-                categoryClass: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
-                title: '시·군 조직위원회 구성 및 발대식 일정 안내',
-                date: '2026.06.10',
-                views: 54,
-                body: [
-                    '충청남도 내 15개 시·군별 조직위원회 구성이 순차적으로 진행됩니다. 각 지역 조직위원회 발대식 일정은 추후 확정되는 대로 공지사항을 통해 안내드립니다.',
-                    '지역 조직위원회 참여를 희망하시는 당원·도민께서는 충청남도당 사무처로 문의해 주시기 바랍니다.'
-                ]
+        function handleDonateModalKeydown(e) {
+            if (e.key === 'Escape') {
+                closeDonateModal();
+                return;
             }
-        };
-        // 공지사항 최신순 노출 순서
-        const noticeOrder = ['notice-6', 'notice-5', 'notice-4', 'notice-3', 'notice-2', 'notice-1'];
+            trapModalFocus(e, document.getElementById('donate-modal-panel'));
+        }
 
-        // 보도자료 게시물 데이터
-        const pressData = {
-            'press-6': {
-                category: '보도자료',
-                categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-                title: '개혁신당 충청남도당, 충남도청과 청년 정책 협력 논의',
-                date: '2026.06.21',
-                views: 45,
-                body: [
-                    '개혁신당 충청남도당이 충남도청 관계자와 만나 청년 일자리·주거 정책 분야 협력 방안을 논의했습니다.',
-                    '이날 회의에서는 지역 청년 인구 유출 문제와 산업 연계형 일자리 창출 방안이 주요 의제로 다뤄졌습니다.',
-                    '도당은 향후 도청과의 정기 협의체 구성을 제안할 계획입니다.'
-                ]
-            },
-            'press-5': {
-                category: '보도자료',
-                categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-                title: '개혁신당 충청남도당, 서산·당진 산업단지 현장 점검',
-                date: '2026.06.19',
-                views: 39,
-                body: [
-                    '개혁신당 충청남도당이 서산·당진 산업단지를 방문해 지역 제조업 현장의 애로사항을 청취했습니다.',
-                    '현장에서는 인력난, 물류 인프라 부족 등 다양한 의견이 제기되었으며, 도당은 이를 정책 자료로 정리해 추후 발표할 예정입니다.'
-                ]
-            },
-            'press-4': {
-                category: '보도자료',
-                categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-                title: '개혁신당 충청남도당, 여성 당원 네트워크 발족',
-                date: '2026.06.18',
-                views: 52,
-                body: [
-                    '개혁신당 충청남도당이 여성 당원들의 정치 참여 확대를 위한 네트워크를 발족했습니다.',
-                    '네트워크는 정책 제안, 멘토링, 지역 활동 지원 등을 중심으로 운영될 예정이며, 정기 모임을 통해 지속적으로 활동을 이어갈 계획입니다.'
-                ]
-            },
-            'press-3': {
-                category: '보도자료',
-                categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-                title: '개혁신당 충청남도당 창당준비위원회 출범',
-                date: '2026.06.21',
-                views: 128,
-                body: [
-                    '개혁신당 충청남도당 창당준비위원회가 공식 출범했습니다. 위원장 이은창을 중심으로 충남 15개 시·군 조직 구성을 본격적으로 추진합니다.',
-                    '창당준비위원회는 진영 논리에서 벗어난 실용 정치를 지역 단위에서부터 실현하는 것을 목표로, 도민과의 현장 소통을 최우선 과제로 삼고 활동을 시작합니다.',
-                    '향후 일정과 활동 내용은 공지사항을 통해 순차적으로 안내드리겠습니다.'
-                ]
-            },
-            'press-2': {
-                category: '보도자료',
-                categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-                title: '이은창 위원장, 충남 15개 시·군 현장 행보 시작',
-                date: '2026.06.17',
-                views: 87,
-                body: [
-                    '개혁신당 충청남도당 이은창 위원장이 천안을 시작으로 충남 15개 시·군 현장 행보에 나섰습니다. 이번 행보는 지역 현안을 직접 듣고 정책에 반영하기 위해 마련됐습니다.',
-                    '이 위원장은 "현장에서 가장 가까운 정치를 만들겠다"며 "도민들의 목소리를 빠짐없이 듣고 실용적인 대안을 마련하겠다"고 밝혔습니다.',
-                    '현장 행보는 매주 순차적으로 진행되며, 일정은 공지사항을 통해 사전에 안내될 예정입니다.'
-                ]
-            },
-            'press-1': {
-                category: '보도자료',
-                categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-                title: '개혁신당 충청남도당, 청년 일자리 정책 토론회 개최',
-                date: '2026.06.08',
-                views: 61,
-                body: [
-                    '개혁신당 충청남도당이 충남 지역 청년 일자리 문제를 주제로 정책 토론회를 개최했습니다. 청년 당원과 전문가가 함께 참여해 지역 산업과 청년 고용 연계 방안을 논의했습니다.',
-                    '토론회에서는 충남의 산업 기반을 활용한 청년 창업 지원, 지역 정착 인센티브 등 다양한 제안이 나왔습니다.',
-                    '도당은 이번 토론회에서 수렴된 의견을 바탕으로 구체적인 정책안을 마련해 나갈 계획입니다.'
-                ]
-            }
-        };
-        // 보도자료 최신순 노출 순서
-        const pressOrder = ['press-6', 'press-5', 'press-4', 'press-3', 'press-2', 'press-1'];
+        // 공지사항·보도자료 게시물 데이터는 board-data.js 에서 로드됩니다.
+        // (noticeData, noticeOrder, pressData, pressOrder)
 
         // 공지사항/보도자료 상세보기 모달 열기/닫기
         function openNoticeModal(id) {
@@ -1487,6 +1899,65 @@
             document.body.style.overflow = '';
             document.removeEventListener('keydown', handleNoticeModalKeydown);
             if (noticeModalLastFocused) noticeModalLastFocused.focus();
+        }
+
+        // 인물 데이터 및 모달 함수는 people.js 참고
+
+        // 지정후원(계좌) 안내 모달 열기/닫기
+        function openDonateModal() {
+            const overlay = document.getElementById('donate-modal-overlay');
+            const modal = document.getElementById('donate-modal');
+            const panel = document.getElementById('donate-modal-panel');
+
+            overlay.classList.remove('hidden');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            donateModalLastFocused = document.activeElement;
+            requestAnimationFrame(() => {
+                overlay.classList.remove('opacity-0');
+                panel.classList.remove('opacity-0', 'scale-95');
+                const closeBtn = panel.querySelector('button[aria-label="닫기"]');
+                if (closeBtn) closeBtn.focus();
+            });
+            document.body.style.overflow = 'hidden';
+            document.addEventListener('keydown', handleDonateModalKeydown);
+        }
+
+        function closeDonateModal() {
+            const overlay = document.getElementById('donate-modal-overlay');
+            const modal = document.getElementById('donate-modal');
+            const panel = document.getElementById('donate-modal-panel');
+
+            overlay.classList.add('opacity-0');
+            panel.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', handleDonateModalKeydown);
+            if (donateModalLastFocused) donateModalLastFocused.focus();
+        }
+
+        // 후원 계좌번호 클립보드 복사
+        function copyDonateAccount() {
+            const text = document.getElementById('donate-account-number').textContent;
+            const btn = document.getElementById('donate-copy-btn');
+
+            function showCopied() {
+                if (!btn) return;
+                const original = btn.textContent;
+                btn.textContent = '복사됨';
+                setTimeout(() => { btn.textContent = original; }, 1500);
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(showCopied).catch(showCopied);
+            } else {
+                showCopied();
+            }
         }
 
         // 의견 보내기 모달 열기/닫기/제출
@@ -1608,8 +2079,8 @@
             }, 2600);
         }
 
-        // '준비중' 페이지 안내 토스트
-        function comingSoon(label) {
+        // '준비중' 페이지 안내 토스트 (인라인 onclick에서 접근 가능하도록 window에 노출)
+        window.comingSoon = function comingSoon(label) {
             const icon = '<svg aria-hidden="true" focusable="false" class="w-4 h-4 text-reform-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>';
             showToast(`${label ? label + ' 페이지는 ' : ''}현재 준비 중입니다.`, icon);
         }
@@ -1685,34 +2156,69 @@
             }
         });
 
+        // 푸터 '연관사이트' 드롭다운 토글
+        function toggleRelatedDropdown() {
+            const menu = document.getElementById('related-dropdown-menu');
+            const btn = document.getElementById('related-dropdown-btn');
+            const icon = document.getElementById('related-dropdown-icon');
+            const isOpen = !menu.classList.contains('hidden');
+
+            if (isOpen) {
+                menu.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+                icon.classList.remove('rotate-180');
+            } else {
+                menu.classList.remove('hidden');
+                btn.setAttribute('aria-expanded', 'true');
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        // 드롭다운 바깥 클릭 또는 ESC 시 닫기 (연관사이트)
+        document.addEventListener('click', (e) => {
+            const wrap = document.getElementById('related-dropdown-wrap');
+            const menu = document.getElementById('related-dropdown-menu');
+            if (wrap && menu && !wrap.contains(e.target) && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                document.getElementById('related-dropdown-btn').setAttribute('aria-expanded', 'false');
+                document.getElementById('related-dropdown-icon').classList.remove('rotate-180');
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            const menu = document.getElementById('related-dropdown-menu');
+            if (e.key === 'Escape' && menu && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                document.getElementById('related-dropdown-btn').setAttribute('aria-expanded', 'false');
+                document.getElementById('related-dropdown-icon').classList.remove('rotate-180');
+            }
+        });
+
         // 제출 완료 등 성공 안내 토스트
         function showSuccessToast(message) {
             const icon = '<svg aria-hidden="true" focusable="false" class="w-4 h-4 text-green-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>';
             showToast(message, icon);
         }
 
+        // 홈 화면 스크롤 스냅 on/off (switchView 외부에서도 재사용 가능)
+        function setHomeSnap(enabled) {
+            document.documentElement.classList.toggle('home-snap-on', enabled);
+        }
+
         // 뷰 전환 로직 (SPA처럼 작동하게 만들기)
-        function switchView(viewId, tabId) {
+        // pushHistory: false 이면 history.pushState를 건너뜀 (popstate 핸들러 내부 호출 시)
+        function switchView(viewId, tabId, pushHistory) {
             const homeView = document.getElementById('view-home');
             const introView = document.getElementById('view-intro');
             const noticeView = document.getElementById('view-notice');
             const privacyView = document.getElementById('view-privacy');
             const termsView = document.getElementById('view-terms');
-            const allViews = [homeView, introView, noticeView, privacyView, termsView];
+            const peopleView = document.getElementById('view-people');
+            const allViews = [homeView, introView, noticeView, privacyView, termsView, peopleView];
 
             allViews.forEach(v => {
                 v.classList.add('hidden');
                 v.classList.remove('block');
             });
-
-            // 홈 화면 스크롤 스냅 on/off
-            function setHomeSnap(enabled) {
-                if (enabled) {
-                    document.documentElement.classList.add('home-snap-on');
-                } else {
-                    document.documentElement.classList.remove('home-snap-on');
-                }
-            }
 
             if (viewId === 'view-home') {
                 homeView.classList.remove('hidden');
@@ -1736,7 +2242,7 @@
                 noticeView.classList.add('block');
                 setHomeSnap(false);
 
-                // 공지및보도자료 탭 진입 시 지정된 탭(없으면 공지사항)이 보이도록 초기화
+                // 소식(공지사항/보도자료) 탭 진입 시 지정된 탭(없으면 공지사항)이 보이도록 초기화
                 if (tabId === 'press') {
                     document.getElementById('tab-btn-press').click();
                 } else {
@@ -1750,13 +2256,115 @@
                 termsView.classList.remove('hidden');
                 termsView.classList.add('block');
                 setHomeSnap(false);
+            } else if (viewId === 'view-people') {
+                peopleView.classList.remove('hidden');
+                peopleView.classList.add('block');
+                setHomeSnap(false);
             }
-            
+
+            // URL 해시 업데이트 (뒤로가기/앞으로가기·공유 지원)
+            if (pushHistory !== false) {
+                const hashViewId = viewId === 'view-home' ? '' : viewId.replace('view-', '');
+                const hashTab   = tabId ? '/' + tabId : '';
+                const newHash   = hashViewId ? '#' + hashViewId + hashTab : '#';
+                // 현재 해시와 같으면 pushState 생략 (중복 스택 방지)
+                if (location.hash !== newHash) {
+                    history.pushState({ viewId, tabId: tabId || null }, '', newHash);
+                }
+            }
+
+            // 탭 제목(title) 업데이트
+            const SITE_NAME = '개혁신당 충청남도당';
+            const VIEW_TITLES = {
+                'view-home':    SITE_NAME,
+                'view-intro':   { greeting: '위원장 인사말', org: '조직도', about: '오시는 길' },
+                'view-notice':  { notice: '공지사항', press: '보도자료' },
+                'view-people':  '인물',
+                'view-privacy': '개인정보 처리방침',
+                'view-terms':   '이용약관',
+            };
+            const titleDef = VIEW_TITLES[viewId];
+            let pageTitle;
+            if (!titleDef || titleDef === SITE_NAME) {
+                pageTitle = SITE_NAME;
+            } else if (typeof titleDef === 'string') {
+                pageTitle = titleDef + ' — ' + SITE_NAME;
+            } else {
+                const sub = titleDef[tabId] || Object.values(titleDef)[0];
+                pageTitle = sub + ' — ' + SITE_NAME;
+            }
+            document.title = pageTitle;
+
             // 페이지 상단으로 부드럽게 스크롤
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // 뒤로가기 / 앞으로가기 처리
+        window.addEventListener('popstate', function(e) {
+            if (e.state && e.state.viewId) {
+                switchView(e.state.viewId, e.state.tabId || undefined, false);
+            } else {
+                // 해시로 직접 접근하거나 히스토리 상태가 없는 경우 해시를 파싱
+                const hash = location.hash.replace('#', '');
+                if (!hash || hash === '/') {
+                    switchView('view-home', undefined, false);
+                } else {
+                    const parts = hash.split('/');
+                    switchView('view-' + parts[0], parts[1] || undefined, false);
+                }
+            }
+        });
+
+        // 페이지 최초 로드 시 URL 해시에 맞는 뷰로 진입
+        (function() {
+            const hash = location.hash.replace('#', '');
+            if (hash && hash !== '/') {
+                const parts = hash.split('/');
+                const viewId = 'view-' + parts[0];
+                const tabId  = parts[1] || undefined;
+                // 유효한 뷰인지 확인 후 전환
+                if (document.getElementById(viewId)) {
+                    switchView(viewId, tabId, false);
+                }
+            }
+        })();
+
         document.addEventListener('DOMContentLoaded', () => {
+            // 인물 카드 그리드의 직함 뱃지를 peopleData 기준으로 렌더링
+            renderAllPeopleCardBadges();
+
+            // 홈 소식 프리뷰: board-data.js 데이터 기반으로 최신 5건 렌더링
+            (function renderHomeNewsList() {
+                const list = document.getElementById('home-news-list');
+                if (!list) return;
+
+                // 공지·보도자료 전체를 날짜 내림차순으로 합산해 최신 5건 추출
+                const allIds = [
+                    ...noticeOrder.map(id => ({ id, data: noticeData[id] })),
+                    ...pressOrder.map(id => ({ id, data: pressData[id] }))
+                ].sort((a, b) => (b.data.date > a.data.date ? 1 : b.data.date < a.data.date ? -1 : 0))
+                 .slice(0, 5);
+
+                list.innerHTML = '';
+                allIds.forEach(({ id, data }) => {
+                    const li = document.createElement('li');
+                    li.className = 'group cursor-pointer';
+                    li.innerHTML = `
+                        <a href="#" class="flex flex-col sm:flex-row sm:items-center justify-between px-4 py-4 rounded-xl leading-relaxed hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-700">
+                            <div class="flex items-center space-x-3 mb-1.5 sm:mb-0">
+                                <span class="px-2.5 py-1 text-[11px] font-bold ${data.categoryClass} rounded-md whitespace-nowrap">${data.category}</span>
+                                <h4 class="text-[15px] font-bold text-gray-800 dark:text-gray-200 group-hover:text-reform-500 transition-colors truncate">${data.title}</h4>
+                            </div>
+                            <span class="text-sm text-gray-400 dark:text-gray-500 sm:ml-4 whitespace-nowrap">${data.date}</span>
+                        </a>`;
+                    li.querySelector('a').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openNoticeModal(id);
+                    });
+                    list.appendChild(li);
+                });
+            })();
+
             // 헤더 축소 시 스냅 섹션 높이를 재계산하기 위해 함수를 외부 스코프에 노출
             let applySnapHeightsGlobal = null;
 
@@ -1804,12 +2412,13 @@
                 }
             })();
 
-            /* 0-A2. 스크롤 시 헤더 축소(슬림화) */
+            /* 0-A2. 스크롤 시 헤더 축소(슬림화) + 글자크기 바 숨김 */
             (function() {
-                const header = document.getElementById('site-header');
+                const header  = document.getElementById('site-header');
+                const fontBar = document.getElementById('font-size-bar');
                 if (!header) return;
 
-                const SCROLL_THRESHOLD = 24; // 이 픽셀 이상 스크롤되면 헤더를 줄임
+                const SCROLL_THRESHOLD = 24; // 이 픽셀 이상 스크롤되면 헤더를 줄이고 바를 숨김
                 let isScrolled = false;
                 let ticking = false;
 
@@ -1818,6 +2427,12 @@
                     if (shouldShrink !== isScrolled) {
                         isScrolled = shouldShrink;
                         header.classList.toggle('is-scrolled', isScrolled);
+
+                        // 글자크기 바: 스크롤 시 숨기고, 최상단 복귀 시 다시 표시
+                        if (fontBar) {
+                            fontBar.classList.toggle('is-collapsed', isScrolled);
+                        }
+
                         // 주의: 헤더가 줄어들 때마다 --header-h(스냅 마진)와 섹션 min-height를
                         // 다시 계산하면 스크롤 도중 레이아웃이 흔들려 스냅이 제멋대로 끌어당기는
                         // 원인이 될 수 있다. 헤더 축소는 시각적 효과일 뿐이므로 스냅 계산과는
@@ -1841,7 +2456,8 @@
             (function() {
                 const slider = document.getElementById('hero-slider');
                 const track = document.getElementById('hero-slider-track');
-                const dotsWrap = document.getElementById('hero-dots');
+                const dotsWrap   = document.getElementById('hero-dots');
+                const dotsWrapPc = document.getElementById('hero-dots-pc');
                 const prevBtn = document.getElementById('hero-prev-btn');
                 const nextBtn = document.getElementById('hero-next-btn');
                 if (!slider || !track) return;
@@ -1851,35 +2467,44 @@
                 let current = 0;
                 let autoTimer = null;
                 const AUTO_INTERVAL = 5000;
+                const announcer = document.getElementById('hero-slide-announcer');
 
-                // 인디케이터 닷 생성
-                const dots = slides.map((_, i) => {
+                // 인디케이터 닷 생성 (모바일용 + PC용 두 컨테이너에 각각)
+                function makeDot(wrap, i) {
                     const dot = document.createElement('button');
                     dot.type = 'button';
                     dot.setAttribute('aria-label', (i + 1) + '번째 슬라이드로 이동');
                     dot.className = 'rounded-full transition-all duration-300';
-                    dotsWrap.appendChild(dot);
+                    wrap.appendChild(dot);
                     dot.addEventListener('click', () => goTo(i));
                     return dot;
-                });
+                }
+                const dots   = slides.map((_, i) => makeDot(dotsWrap, i));
+                const dotsPc = dotsWrapPc ? slides.map((_, i) => makeDot(dotsWrapPc, i)) : [];
 
                 function renderDots() {
-                    dots.forEach((dot, i) => {
-                        if (i === current) {
-                            dot.style.width = '20px';
-                            dot.style.height = '6px';
-                            dot.style.background = '#fff';
-                        } else {
-                            dot.style.width = '6px';
-                            dot.style.height = '6px';
-                            dot.style.background = 'rgba(255,255,255,0.5)';
-                        }
+                    const allPairs = dots.map((d, i) => [d, dotsPc[i]]);
+                    allPairs.forEach(([dot, dotPc], i) => {
+                        const active = i === current;
+                        [dot, dotPc].forEach(d => {
+                            if (!d) return;
+                            d.style.width  = active ? '20px' : '6px';
+                            d.style.height = '6px';
+                            d.style.background = active ? '#FF5E00' : 'rgba(150,150,150,0.4)';
+                        });
+                        // PC 전용 닷은 슬라이더 내부 흰색 유지
+                        if (dotPc) dotPc.style.background = active ? '#fff' : 'rgba(255,255,255,0.5)';
                     });
                 }
 
                 function update() {
                     track.style.transform = 'translateX(-' + (current * 100) + '%)';
                     renderDots();
+                    if (announcer) {
+                        const heading = slides[current].querySelector('h2');
+                        const label = heading ? heading.textContent.replace(/\s+/g, ' ').trim() : ('슬라이드 ' + (current + 1));
+                        announcer.textContent = '슬라이드 ' + (current + 1) + ' / ' + total + ': ' + label;
+                    }
                 }
 
                 function goTo(idx) {
@@ -1937,12 +2562,14 @@
             function switchIntroTab(activeBtn, activeSec) {
                 introTabs.forEach(({ btn, sec }) => {
                     if (btn === activeBtn) {
-                        btn.classList.add('text-reform-500', 'border-reform-500');
-                        btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                        btn.classList.add('bg-reform-500', 'text-white');
+                        btn.classList.remove('text-gray-500', 'text-gray-400', 'bg-gray-100', 'bg-gray-800');
+                        btn.setAttribute('aria-selected', 'true');
                         sec.classList.remove('hidden');
                     } else {
-                        btn.classList.remove('text-reform-500', 'border-reform-500');
-                        btn.classList.add('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                        btn.classList.remove('bg-reform-500', 'text-white');
+                        btn.classList.add('text-gray-500');
+                        btn.setAttribute('aria-selected', 'false');
                         sec.classList.add('hidden');
                     }
                 });
@@ -1952,7 +2579,7 @@
             btnOrg.addEventListener('click', () => switchIntroTab(btnOrg, secOrg));
             btnAbout.addEventListener('click', () => switchIntroTab(btnAbout, secAbout));
 
-            /* 1-1. 공지 및 보도자료 탭 (공지사항 / 보도자료) 전환 로직 */
+            /* 1-1. 소식 탭 (공지사항 / 보도자료) 전환 로직 */
             const btnNoticelist = document.getElementById('tab-btn-noticelist');
             const btnPress = document.getElementById('tab-btn-press');
             const secNoticelist = document.getElementById('section-noticelist');
@@ -1968,17 +2595,41 @@
                     if (btn === activeBtn) {
                         btn.classList.add('text-reform-500', 'border-reform-500');
                         btn.classList.remove('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                        btn.setAttribute('aria-selected', 'true');
                         sec.classList.remove('hidden');
                     } else {
                         btn.classList.remove('text-reform-500', 'border-reform-500');
-                        btn.classList.add('text-gray-500', 'dark:text-gray-400', 'border-transparent');
+                        btn.classList.add('text-gray-500', 'border-transparent');
+                        btn.setAttribute('aria-selected', 'false');
                         sec.classList.add('hidden');
                     }
                 });
             }
 
-            btnNoticelist.addEventListener('click', () => switchNoticeTab(btnNoticelist, secNoticelist));
-            btnPress.addEventListener('click', () => switchNoticeTab(btnPress, secPress));
+            btnNoticelist.addEventListener('click', () => {
+                switchNoticeTab(btnNoticelist, secNoticelist);
+                const t = document.getElementById('notice-hero-title');
+                const d = document.getElementById('notice-hero-desc');
+                const b = document.getElementById('notice-hero-breadcrumb');
+                if(t) t.textContent = '공지사항';
+                if(d) d.textContent = '개혁신당 충청남도당의 새로운 소식을 전해드립니다';
+                if(b) b.textContent = '공지사항';
+                // 보도자료 탭 검색어 초기화
+                const pressSearch = document.getElementById('press-search');
+                if (pressSearch && pressSearch.value) { pressSearch.value = ''; pressSearch.dispatchEvent(new Event('input')); }
+            });
+            btnPress.addEventListener('click', () => {
+                switchNoticeTab(btnPress, secPress);
+                const t = document.getElementById('notice-hero-title');
+                const d = document.getElementById('notice-hero-desc');
+                const b = document.getElementById('notice-hero-breadcrumb');
+                if(t) t.textContent = '보도자료';
+                if(d) d.textContent = '개혁신당 충청남도당의 활동 소식을 보도자료로 전해드립니다';
+                if(b) b.textContent = '보도자료';
+                // 공지사항 탭 검색어 초기화
+                const noticeSearch = document.getElementById('noticelist-search');
+                if (noticeSearch && noticeSearch.value) { noticeSearch.value = ''; noticeSearch.dispatchEvent(new Event('input')); }
+            });
 
             /* 1-2. 공지사항/보도자료 리스트 렌더링 (검색 + 더보기) */
             const PAGE_SIZE = 5;
@@ -2005,19 +2656,29 @@
                 function renderRow(id, index) {
                     const item = dataMap[id];
                     const a = document.createElement('a');
-                    a.href = '#';
-                    a.className = 'flex flex-col sm:grid sm:grid-cols-12 gap-2 sm:gap-4 px-6 py-5 text-[14px] border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors sm:items-center sm:text-center';
-                    a.addEventListener('click', (e) => { e.preventDefault(); openNoticeModal(id); });
+                    // 실제 목적지를 가진 앵커를 사용해, 키보드/마우스 우클릭으로도
+                    // 링크의 목적지를 인지하고 "새 탭에서 열기"가 가능하도록 함
+                    a.href = '#' + id;
+                    a.className = 'flex flex-col sm:grid sm:grid-cols-12 gap-1.5 sm:gap-4 px-5 py-5 sm:py-5 text-[14px] leading-relaxed border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors sm:items-center sm:text-center';
+                    a.addEventListener('click', (e) => {
+                        // 새 탭 열기(Ctrl/Cmd/Shift/중간클릭)는 막지 않고 기본 동작을 유지
+                        if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return;
+                        e.preventDefault();
+                        openNoticeModal(id);
+                    });
 
                     a.innerHTML = `
                         <div class="hidden sm:block col-span-1 text-gray-400 dark:text-gray-500">${index}</div>
                         <div class="col-span-6 sm:text-left font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                            <span class="px-2 py-0.5 text-[11px] font-bold ${item.categoryClass} rounded-md whitespace-nowrap sm:hidden">${item.category}</span>
-                            ${item.title}
+                            <span class="px-2 py-0.5 text-[11px] font-bold ${item.categoryClass} rounded-md whitespace-nowrap sm:hidden shrink-0">${item.category}</span>
+                            <span class="leading-snug">${item.title}</span>
                         </div>
                         <div class="hidden sm:block col-span-2 text-gray-500 dark:text-gray-400">${item.category}</div>
                         <div class="hidden sm:block col-span-1 text-gray-400 dark:text-gray-500">${item.views}</div>
-                        <div class="col-span-2 text-gray-400 dark:text-gray-500 sm:text-center">${item.date}</div>
+                        <div class="col-span-2 text-[13px] text-gray-400 dark:text-gray-500 sm:text-center flex sm:justify-center items-center gap-1.5 mt-0.5 sm:mt-0 pl-0.5 sm:pl-0">
+                            <span class="hidden sm:inline-block w-px h-3 bg-gray-200 dark:bg-gray-700 shrink-0"></span>
+                            ${item.date}
+                        </div>
                     `;
                     return a;
                 }
@@ -2121,11 +2782,6 @@
             const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
             let mobileMenuLastFocused = null;
 
-            function getFocusableEls(container) {
-                return Array.from(container.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'))
-                    .filter(el => el.offsetParent !== null);
-            }
-
             function trapFocus(e) {
                 if (e.key !== 'Tab' || !mobileMenu) return;
                 const focusables = getFocusableEls(mobileMenu);
@@ -2190,15 +2846,8 @@
             const themeToggleThumb = document.getElementById('theme-toggle-thumb');
 
             function applyThemeToggleStyle(isDark) {
-                if (isDark) {
-                    themeToggleBtn.style.background = '#334155';
-                    themeToggleThumb.style.transform = 'translateX(24px)';
-                    themeToggleBtn.setAttribute('aria-pressed', 'true');
-                } else {
-                    themeToggleBtn.style.background = '#e2e8f0';
-                    themeToggleThumb.style.transform = 'translateX(0)';
-                    themeToggleBtn.setAttribute('aria-pressed', 'false');
-                }
+                themeToggleBtn.classList.toggle('is-dark', isDark);
+                themeToggleBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
             }
 
             applyThemeToggleStyle(document.documentElement.classList.contains('dark'));
@@ -2214,7 +2863,6 @@
                 }
                 applyThemeToggleStyle(!isDark);
             });
-        });
 
             /* 4. 글자크기 조절 */
             (function() {
@@ -2227,24 +2875,7 @@
 
                 function applyBarTheme(isDark) {
                     if (!bar) return;
-                    bar.style.background = isDark ? '#111827' : '#fff';
-                    bar.style.borderBottomColor = isDark ? '#1f2937' : '#e5e7eb';
-                    if (pctEl) pctEl.style.color = isDark ? '#d1d5db' : '#374151';
-                    [upBtn, downBtn].forEach(b => {
-                        if (!b) return;
-                        b.style.color = isDark ? '#9ca3af' : '#6b7280';
-                        b.style.borderColor = isDark ? '#374151' : '#e5e7eb';
-                        b.style.background = 'transparent';
-                        b.onmouseenter = () => b.style.background = isDark ? '#1f2937' : '#f3f4f6';
-                        b.onmouseleave = () => b.style.background = 'transparent';
-                    });
-                    const wrap = pctEl && pctEl.parentElement;
-                    if (wrap) {
-                        wrap.style.background = isDark ? '#1f2937' : '#f9fafb';
-                        wrap.style.borderColor = isDark ? '#374151' : '#e5e7eb';
-                    }
-                    const label = bar.querySelector('span:first-child');
-                    if (label) label.style.color = isDark ? '#6b7280' : '#9ca3af';
+                    bar.classList.toggle('is-dark', isDark);
                 }
 
                 function apply(p) {
@@ -2259,7 +2890,6 @@
                 apply(pct);
                 applyBarTheme(document.documentElement.classList.contains('dark'));
 
-                const origApplyTheme = window._applyThemeToggleStyle;
                 const origToggle = document.getElementById('theme-toggle');
                 if (origToggle) {
                     origToggle.addEventListener('click', () => {
@@ -2270,6 +2900,7 @@
                 if (upBtn) upBtn.addEventListener('click', () => apply(pct + STEP));
                 if (downBtn) downBtn.addEventListener('click', () => apply(pct - STEP));
             })();
+        }); // DOMContentLoaded 종료
     </script>
 </body>
 </html>
