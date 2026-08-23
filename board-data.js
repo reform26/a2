@@ -1,159 +1,123 @@
 // ============================================================
 //  board-data.js
-//  공지사항(noticeData) · 보도자료(pressData) 게시물 데이터
-//  index.html 의 <script> 블록에서 분리된 파일입니다.
-//  이 파일을 수정해 게시물을 추가·수정·삭제하세요.
+//  공지사항(noticeData) 게시물 데이터 — 구글 스프레드시트 연동
+//
+//  구글 스프레드시트 + Apps Script 웹 앱을 데이터 소스로 사용합니다.
+//  아래 NOTICE_SHEET_API_URL 에 배포된 웹 앱 URL을 붙여넣으면
+//  스프레드시트에 새 행을 추가하는 것만으로 공지사항이 갱신됩니다.
+//
+//  스프레드시트 컬럼 구성 (1행 헤더):
+//    A: id      예) notice_001   (다른 행과 겹치지 않는 고유 값)
+//    B: type    예) 공지사항 / 일정  (분류명, 자유롭게 추가 가능)
+//    C: title   글 제목
+//    D: date    예) 2026.07.15
+//    E: views   조회수 (숫자)
+//    F: content 본문 내용 (셀 안에서 Alt+Enter로 줄바꿈하면 문단으로 분리됩니다)
 // ============================================================
 
-// ── 공지사항 게시물 데이터 ──────────────────────────────────
-const noticeData = {
-    'notice-6': {
-        category: '공지',
-        categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-        title: '충청남도당 사무처 정기 휴무 안내',
-        date: '2026.06.20',
-        views: 33,
-        body: [
-            '충청남도당 사무처는 매주 일요일 정기 휴무를 시행합니다. 평일 운영 시간은 오전 9시부터 오후 6시까지입니다.',
-            '긴급한 문의사항은 이메일(contact@reform-chungnam.kr)로 남겨주시면 다음 영업일에 순차적으로 답변드립니다.'
-        ]
-    },
-    'notice-5': {
-        category: '일정',
-        categoryClass: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
-        title: '천안·아산 지역 당원 간담회 개최 일정 안내',
-        date: '2026.06.18',
-        views: 41,
-        body: [
-            '천안·아산 지역 당원을 대상으로 간담회를 개최합니다. 지역 현안 및 당 활동 방향에 대한 자유로운 의견 교환의 자리가 될 예정입니다.',
-            '참석을 원하시는 당원께서는 사무처로 사전 신청해 주시기 바랍니다.'
-        ]
-    },
-    'notice-4': {
-        category: '공지',
-        categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-        title: '홈페이지 개편에 따른 일부 서비스 점검 안내',
-        date: '2026.06.16',
-        views: 28,
-        body: [
-            '보다 나은 서비스 제공을 위해 홈페이지 일부 기능을 점검할 예정입니다. 점검 시간 동안 일시적으로 접속이 원활하지 않을 수 있습니다.',
-            '이용에 불편을 드려 죄송합니다. 점검은 최소한의 시간 내에 완료하도록 하겠습니다.'
-        ]
-    },
-    'notice-3': {
-        category: '공지',
-        categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-        title: '후원 계좌 안내 및 후원금 영수증 발급 절차',
-        date: '2026.06.16',
-        views: 72,
-        body: [
-            '개혁신당 충청남도당을 후원해주시는 도민과 당원께 감사드립니다. 후원금은 정치자금법에 따라 투명하게 관리됩니다.',
-            '연말 후원금 영수증 발급을 원하시는 분은 성명, 생년월일, 후원 일자를 사무처로 알려주시면 순차적으로 발급해 드립니다.'
-        ]
-    },
-    'notice-2': {
-        category: '공지',
-        categoryClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-        title: '충청남도당 당원 입당 안내 및 절차 안내',
-        date: '2026.06.15',
-        views: 96,
-        body: [
-            '개혁신당 충청남도당에 함께하실 당원을 모십니다. 입당은 개혁신당 공식 입당 페이지를 통해 온라인으로 간편하게 신청하실 수 있습니다.',
-            '입당 시 이름, 생년월일, 휴대전화번호 등 기본 정보를 입력하시면 되며, 별도의 서류 제출 없이 온라인으로 절차가 진행됩니다.',
-            '입당 관련 문의사항은 충청남도당 사무처로 연락 주시기 바랍니다.'
-        ],
-        cta: { label: '온라인 입당하기', href: 'https://home.reformparty.kr/auth/register' }
-    },
-    'notice-1': {
-        category: '일정',
-        categoryClass: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
-        title: '시·군 조직위원회 구성 및 발대식 일정 안내',
-        date: '2026.06.10',
-        views: 54,
-        body: [
-            '충청남도 내 15개 시·군별 조직위원회 구성이 순차적으로 진행됩니다. 각 지역 조직위원회 발대식 일정은 추후 확정되는 대로 공지사항을 통해 안내드립니다.',
-            '지역 조직위원회 참여를 희망하시는 당원·도민께서는 충청남도당 사무처로 문의해 주시기 바랍니다.'
-        ]
-    }
+// 🔧 [필수] Apps Script [배포]→[새 배포]로 생성한 웹 앱 URL을 아래에 붙여넣으세요.
+//    형식: https://script.google.com/macros/s/xxxxxxxx/exec
+const NOTICE_SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxe1mD95jWSTDM89ubELbAGznGjZqtSHrqzcrl5htcb1LBsAZ5bx9s4q6CcU4f3cigQ/exec';
+
+// 공지사항 게시물 데이터 — 구글 시트에서 비동기로 채워집니다.
+// (초기값은 빈 값이며, noticeDataReady Promise가 끝난 뒤에 실제 값이 채워집니다)
+let noticeData = {};
+let noticeOrder = [];
+
+// 시트의 type(분류) 값에 따른 뱃지 색상 매핑
+// 새로운 분류를 쓰고 싶다면 이 객체에 항목을 추가하세요.
+const NOTICE_TYPE_CLASS = {
+    '공지':     'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+    '공지사항': 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+    '일정':     'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
+    '보도자료': 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
 };
+const NOTICE_TYPE_CLASS_DEFAULT = 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300';
 
-// 공지사항 최신순 노출 순서
-const noticeOrder = ['notice-6', 'notice-5', 'notice-4', 'notice-3', 'notice-2', 'notice-1'];
-
-
-// ── 보도자료 게시물 데이터 ──────────────────────────────────
-const pressData = {
-    'press-6': {
-        category: '보도자료',
-        categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-        title: '개혁신당 충청남도당, 충남도청과 청년 정책 협력 논의',
-        date: '2026.06.21',
-        views: 45,
-        body: [
-            '개혁신당 충청남도당이 충남도청 관계자와 만나 청년 일자리·주거 정책 분야 협력 방안을 논의했습니다.',
-            '이날 회의에서는 지역 청년 인구 유출 문제와 산업 연계형 일자리 창출 방안이 주요 의제로 다뤄졌습니다.',
-            '도당은 향후 도청과의 정기 협의체 구성을 제안할 계획입니다.'
-        ]
-    },
-    'press-5': {
-        category: '보도자료',
-        categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-        title: '개혁신당 충청남도당, 서산·당진 산업단지 현장 점검',
-        date: '2026.06.19',
-        views: 39,
-        body: [
-            '개혁신당 충청남도당이 서산·당진 산업단지를 방문해 지역 제조업 현장의 애로사항을 청취했습니다.',
-            '현장에서는 인력난, 물류 인프라 부족 등 다양한 의견이 제기되었으며, 도당은 이를 정책 자료로 정리해 추후 발표할 예정입니다.'
-        ]
-    },
-    'press-4': {
-        category: '보도자료',
-        categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-        title: '개혁신당 충청남도당, 여성 당원 네트워크 발족',
-        date: '2026.06.18',
-        views: 52,
-        body: [
-            '개혁신당 충청남도당이 여성 당원들의 정치 참여 확대를 위한 네트워크를 발족했습니다.',
-            '네트워크는 정책 제안, 멘토링, 지역 활동 지원 등을 중심으로 운영될 예정이며, 정기 모임을 통해 지속적으로 활동을 이어갈 계획입니다.'
-        ]
-    },
-    'press-3': {
-        category: '보도자료',
-        categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-        title: '개혁신당 충청남도당 창당준비위원회 출범',
-        date: '2026.06.21',
-        views: 128,
-        body: [
-            '개혁신당 충청남도당 창당준비위원회가 공식 출범했습니다. 위원장 이은창을 중심으로 충남 15개 시·군 조직 구성을 본격적으로 추진합니다.',
-            '창당준비위원회는 진영 논리에서 벗어난 실용 정치를 지역 단위에서부터 실현하는 것을 목표로, 도민과의 현장 소통을 최우선 과제로 삼고 활동을 시작합니다.',
-            '향후 일정과 활동 내용은 공지사항을 통해 순차적으로 안내드리겠습니다.'
-        ]
-    },
-    'press-2': {
-        category: '보도자료',
-        categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-        title: '이은창 위원장, 충남 15개 시·군 현장 행보 시작',
-        date: '2026.06.17',
-        views: 87,
-        body: [
-            '개혁신당 충청남도당 이은창 위원장이 천안을 시작으로 충남 15개 시·군 현장 행보에 나섰습니다. 이번 행보는 지역 현안을 직접 듣고 정책에 반영하기 위해 마련됐습니다.',
-            '이 위원장은 "현장에서 가장 가까운 정치를 만들겠다"며 "도민들의 목소리를 빠짐없이 듣고 실용적인 대안을 마련하겠다"고 밝혔습니다.',
-            '현장 행보는 매주 순차적으로 진행되며, 일정은 공지사항을 통해 사전에 안내될 예정입니다.'
-        ]
-    },
-    'press-1': {
-        category: '보도자료',
-        categoryClass: 'bg-orange-100 text-reform-500 dark:bg-orange-900/30 dark:text-orange-400',
-        title: '개혁신당 충청남도당, 청년 일자리 정책 토론회 개최',
-        date: '2026.06.08',
-        views: 61,
-        body: [
-            '개혁신당 충청남도당이 충남 지역 청년 일자리 문제를 주제로 정책 토론회를 개최했습니다. 청년 당원과 전문가가 함께 참여해 지역 산업과 청년 고용 연계 방안을 논의했습니다.',
-            '토론회에서는 충남의 산업 기반을 활용한 청년 창업 지원, 지역 정착 인센티브 등 다양한 제안이 나왔습니다.',
-            '도당은 이번 토론회에서 수렴된 의견을 바탕으로 구체적인 정책안을 마련해 나갈 계획입니다.'
-        ]
+// 구글 시트 한 행(row)을 사이트에서 쓰는 게시물 객체 형태로 변환
+function _mapSheetRowToNotice(row) {
+    const type = (row.type || '공지사항').toString().trim();
+    let body;
+    if (Array.isArray(row.content)) {
+        body = row.content.map(p => p.toString()).filter(p => p.trim() !== '');
+    } else {
+        body = [String(row.content || '')];
     }
-};
+    if (body.length === 0) body = [''];
 
-// 보도자료 최신순 노출 순서
-const pressOrder = ['press-6', 'press-5', 'press-4', 'press-3', 'press-2', 'press-1'];
+    return {
+        category: type,
+        categoryClass: NOTICE_TYPE_CLASS[type] || NOTICE_TYPE_CLASS_DEFAULT,
+        title: (row.title || '').toString(),
+        date: (row.date || '').toString(),
+        views: Number(row.views) || 0,
+        body: body
+    };
+}
+
+// 구글 스프레드시트(Apps Script 웹 앱)에서 공지사항 데이터를 가져와
+// noticeData / noticeOrder 를 채웁니다.
+// index.html 쪽 렌더링 코드는 반드시 이 Promise(noticeDataReady)가
+// 끝난 뒤에 목록·모달을 그려야 합니다.
+const noticeDataReady = (async function loadNoticeDataFromSheet() {
+    try {
+        const res = await fetch(NOTICE_SHEET_API_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('시트 응답 오류: HTTP ' + res.status);
+        const rows = await res.json();
+        if (!Array.isArray(rows)) throw new Error('예상치 못한 응답 형식입니다.');
+
+        const data = {};
+        rows.forEach(row => {
+            const id = String(row.id || '').trim();
+            if (!id) return; // id가 없는 행은 건너뜀
+            data[id] = _mapSheetRowToNotice(row);
+        });
+
+        // 날짜 내림차순(최신순) 정렬. 날짜가 같으면 id 역순으로 보조 정렬.
+        const order = Object.keys(data).sort((a, b) => {
+            const da = data[a].date, db = data[b].date;
+            if (da !== db) return da > db ? -1 : 1;
+            return b.localeCompare(a);
+        });
+
+        noticeData = data;
+        noticeOrder = order;
+        return true;
+    } catch (err) {
+        console.error('[공지사항] 구글 스프레드시트 데이터를 불러오지 못했습니다:', err);
+        noticeData = {};
+        noticeOrder = [];
+        return false;
+    }
+})();
+
+// ============================================================
+//  조회수 자동 증가
+//
+//  게시물 상세 모달을 열 때 호출됩니다. 같은 브라우저 세션(탭을 닫기 전까지)에서
+//  동일한 게시물을 여러 번 열어도 중복으로 카운트되지 않도록
+//  sessionStorage로 이미 조회한 id를 기록해 둡니다.
+// ============================================================
+function incrementNoticeView(id) {
+    if (!id || !noticeData[id]) return;
+
+    // 이번 세션에서 이미 조회수를 올린 게시물이면 서버 요청을 보내지 않음
+    const viewedKey = 'notice_viewed_' + id;
+    try {
+        if (sessionStorage.getItem(viewedKey)) return;
+        sessionStorage.setItem(viewedKey, '1');
+    } catch (e) {
+        // sessionStorage를 쓸 수 없는 환경(프라이빗 모드 등)이면 그냥 계속 진행
+    }
+
+    // 화면에는 먼저 즉시 반영(체감 반응 속도용). 서버 반영은 비동기로 처리.
+    noticeData[id].views = (Number(noticeData[id].views) || 0) + 1;
+
+    const url = NOTICE_SHEET_API_URL
+        + '?action=incrementView&id=' + encodeURIComponent(id);
+
+    fetch(url, { method: 'GET', cache: 'no-store' })
+        .catch(err => {
+            console.error('[공지사항] 조회수 증가 요청 실패:', err);
+        });
+}
