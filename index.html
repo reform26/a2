@@ -18,6 +18,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </script>
 <!-- Juicer -->
 <script type="text/javascript" src="https://www.juicer.io/embed/chungnam-reformparty/embed-code.js" async defer></script>
+<style>
+/* 모바일 화면(화면 너비 768px 이하)에서 강제로 2열로 변경 */
+@media (max-width: 768px) {
+    .juicer-feed.grid li.feed-item {
+        width: 50% !important; /* 2열 배치 */
+        padding: 5px !important; /* 간격 조절 */
+        box-sizing: border-box !important;
+    }
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>개혁신당 충남도당</title>
