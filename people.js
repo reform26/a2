@@ -72,12 +72,18 @@ const peopleSnsIcons = {
     site: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5l6-6m0 0h-4m4 0v4M11 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-5"/></svg>'
 };
 
+// 🔧 [임시] 아래 배열에 넣은 직함은 뱃지에서 잠시 숨김 처리됩니다.
+//    (peopleData 원본은 건드리지 않으므로, 나중에 다시 보이게 하려면
+//     이 배열에서 해당 항목만 지우면 됩니다.)
+const PEOPLE_STATUS_HIDDEN = ['당협위원장'];
+
 // ===== 인물 직함 뱃지 렌더링 (카드/모달 공용) =====
 // size: 'sm'(카드) | 'md'(모달)
 function renderPeopleBadges(container, statusList, size) {
     if (!container) return;
     container.innerHTML = '';
-    const list = Array.isArray(statusList) ? statusList : [statusList];
+    const list = (Array.isArray(statusList) ? statusList : [statusList])
+        .filter(label => !PEOPLE_STATUS_HIDDEN.includes(label));
     const sizeClass = size === 'md'
         ? 'px-2.5 py-1 text-[11px]'
         : 'px-2 py-0.5 text-[10px] shadow-sm';
