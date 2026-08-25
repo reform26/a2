@@ -649,6 +649,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                     <!-- Juicer 임베드 -->
                     <ul class="juicer-feed" data-feed-id="chungnam-reformparty"></ul>
+
+                    <!-- Juicer는 컬럼 최소너비 200px을 강제해서 모바일에서 자동으로 1열이 되어버립니다.
+                         아래 CSS로 모바일 구간(767px 이하)에서만 Juicer의 자체 레이아웃 계산을 무시하고
+                         2열 그리드를 강제 적용합니다(2×4처럼 보이게). PC는 원래대로 columns 설정(4열) 유지. -->
+                    <style>
+                        @media (max-width: 767px) {
+                            .juicer-feed {
+                                display: grid !important;
+                                grid-template-columns: repeat(2, 1fr) !important;
+                                gap: 8px !important;
+                            }
+                            .juicer-feed li.feed-item {
+                                width: 100% !important;
+                                margin: 0 !important;
+                                float: none !important;
+                            }
+                        }
+                    </style>
                 </div>
             </section>
 
