@@ -1,2 +1,4 @@
 User-agent: *
-Allow:/
+Allow: /
+
+Sitemap: https://reformchungnam.co.kr/sitemap.xml
