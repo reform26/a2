@@ -2624,18 +2624,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     // 풀스크린 높이 강제도 스냅이 실제로 적용되는 모바일에서만 필요하다.
                     // PC에서는 스냅을 쓰지 않으므로 섹션이 콘텐츠 높이만큼만 차지하도록
                     // 자연스러운 스크롤을 유지한다.
-                    const isMobile = window.innerWidth < 1024;
-                    const sectionMinHeight = window.innerHeight - fixedAreaHeight;
-
+                    // 모바일에서 섹션을 화면 높이만큼 강제로 채우면, 콘텐츠가 화면보다 짧을 때
+                    // justify-center로 인해 콘텐츠 위/아래에 큰 공백이 생겨 가독성이 떨어진다.
+                    // 따라서 PC/모바일 모두 강제 높이를 주지 않고 콘텐츠 크기만큼만 차지하게 한다.
                     fillSections.forEach(sec => {
-                        if (isMobile) {
-                            // min-height만 지정해서, 콘텐츠가 더 크면 섹션이 자연스럽게 늘어나고
-                            // (justify-center로 인한 콘텐츠 잘림 없음) 화면보다 작으면 한 화면을 채운다.
-                            sec.style.minHeight = sectionMinHeight + 'px';
-                        } else {
-                            // PC에서는 강제 높이를 풀어 콘텐츠 크기만큼만 차지하게 한다.
-                            sec.style.minHeight = '';
-                        }
+                        sec.style.minHeight = '';
                     });
                 }
 
