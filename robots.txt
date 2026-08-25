@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://reformchungnam.co.kr/sitemap.xml
+#DaumWebMasterTool:c6c085353c417b14c57a20469458c444dbb454495399457295268cfc501067c7:88eBG2sqCT5qecZhTe5WdA==
