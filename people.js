@@ -28,22 +28,6 @@ const peopleData = {
             yt: 'https://www.youtube.com/@%EC%9D%B4%EC%9D%80%EC%B0%BD-l8u'
         }
     },
-    'lee-seongjin': {
-        name: '이성진',
-        status: ['당협위원장', '운영위원'],
-        bio: [
-            '천안시 병 당협위원장',
-            '전) 충청남도당 위원장',
-            '전) 개혁신당 홍보부총장',
-            '21대 대선 홍보부본부장'
-        ],
-        photo: 'https://i.imgur.com/g3zvOOa.png',
-        sns: {
-            yt: 'https://www.youtube.com/@Leeseongjin24',
-            fb: 'https://www.facebook.com/positivemoneel',
-            ig: 'https://www.instagram.com/leeseong_'
-        }
-    },
     'go-jaeyun': {
         name: '고재윤',
         status: ['대변인'],
