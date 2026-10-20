@@ -27,23 +27,6 @@ const peopleData = {
             ig: 'https://www.instagram.com/eunchang_0100/',
             yt: 'https://www.youtube.com/@%EC%9D%B4%EC%9D%80%EC%B0%BD-l8u'
         }
-    },
-    'go-jaeyun': {
-        name: '고재윤',
-        status: ['대변인'],
-        bio: [
-            '충남도당 대변인',
-            '대전시당 정책·자문위원',
-            '21대 대선 충남 선대본부 위원',
-            '자원봉사단체 청춘 대표'
-        ],
-        photo: 'https://i.imgur.com/Fyk1Di8.png',
-        sns: {
-            fb: 'https://www.facebook.com/profile.php?id=100075309062913',
-            ig: 'https://www.instagram.com/yn._.jae/',
-            blog: 'https://m.blog.naver.com/kojy9402?tab=1',
-            site: 'https://litt.ly/gojaeyun'
-        }
     }
 };
 
