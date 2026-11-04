@@ -14,7 +14,7 @@
 const peopleData = {
     'lee-eunchang': {
         name: '이은창',
-        status: ['도당위원장', '당협위원장', '운영위원'],
+        status: ['도당위원장', '공주·부여·청양 당협위원장', '운영위원'],
         bio: [
             '충청남도당 위원장 직무대행',
             '공주·부여·청양 당협위원장',
@@ -42,7 +42,7 @@ const peopleSnsIcons = {
 // 🔧 [임시] 아래 배열에 넣은 직함은 뱃지에서 잠시 숨김 처리됩니다.
 //    (peopleData 원본은 건드리지 않으므로, 나중에 다시 보이게 하려면
 //     이 배열에서 해당 항목만 지우면 됩니다.)
-const PEOPLE_STATUS_HIDDEN = ['당협위원장'];
+const PEOPLE_STATUS_HIDDEN = [];
 
 // ===== 인물 직함 뱃지 렌더링 (카드/모달 공용) =====
 // size: 'sm'(카드) | 'md'(모달)
